@@ -7,7 +7,7 @@
 //
 
 #import "GLCalendarDayCellBackgroundCover.h"
-#define POINT_SCALE 1.3
+//#define POINT_SCALE 1.3
 
 @interface GLCalendarRangePoint : UIView
 @property (nonatomic, strong, readonly) UIColor *strokeColor;

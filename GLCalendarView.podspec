@@ -1,12 +1,12 @@
 
 Pod::Spec.new do |s|
-  s.name         = "GLCalendarView"
-  s.version      = "1.1.0"
-  s.summary      = "Fully customizable date range picker"
-  s.homepage     = "https://github.com/Glow-Inc/GLCalendarView"
+  s.name         = "GLCalendarView-Square"
+  s.version      = "1.0"
+  s.summary      = "Somewhat customizable date range picker"
+  s.homepage     = "https://github.com/gelosi/GLCalendarView"
   s.license      = "MIT"
-  s.author       = { "leo" => "leo@glowing.com" }
-  s.source       = { :git => "https://github.com/Glow-Inc/GLCalendarView.git", :tag => 'v1.1.0'}
+  s.author       = { "leo" => "gelosi@gmail.com" }
+  s.source       = { :git => "https://github.com/gelosi/GLCalendarView.git", :tag => 'v1.0.0'}
   s.source_files = "GLCalendarView/Sources/**/*.{h,m}"
   s.resources = [
     "GLCalendarView/Sources/**/*.{png}",
