@@ -1,6 +1,6 @@
 
 Pod::Spec.new do |s|
-  s.name         = "GLCalendarView"
+  s.name         = "GLCalendarView-Custom"
   s.version      = "1.0"
   s.summary      = "Somewhat customizable date range picker"
   s.homepage     = "https://github.com/gelosi/GLCalendarView"
