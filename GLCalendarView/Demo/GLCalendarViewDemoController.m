@@ -126,9 +126,10 @@
 
 - (IBAction)deleteButtonPressed:(id)sender
 {
-    if (self.rangeUnderEdit) {
-        [self.calendarView removeRange:self.rangeUnderEdit];
-    }
+//    if (self.rangeUnderEdit) {
+//        [self.calendarView removeRange:self.rangeUnderEdit];
+//    }
+    [self.calendarView scrollToDate:[NSDate date] animated:YES];
 }
 
 @end

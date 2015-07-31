@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface GLCalendarMonthCoverView : UIScrollView
-@property (nonatomic, strong) NSDictionary *textAttributes;
+@property (nonatomic, strong) NSDictionary *textMonthAttributes;
+@property (nonatomic, strong) NSDictionary *textYearAttributes;
 - (void)updateWithFirstDate:(NSDate *)firstDate lastDate:(NSDate *)lastDate calendar:(NSCalendar *)calendar rowHeight:(CGFloat)rowHeight;
 @end

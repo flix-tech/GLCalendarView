@@ -94,9 +94,6 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     [self addSubview:self.magnifierContainer];
     self.magnifierContainer.hidden = YES;
 
-
-    self.collectionView.contentInset = UIEdgeInsetsMake(-self.cellWidth*13, 0, -600, 0);
-    
     [self reloadAppearance];
 }
 
@@ -139,7 +136,10 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     self.rowHeight = appearance.rowHeight ?: DEFAULT_ROW_HEIGHT;
     self.weekDayTitleAttributes = appearance.weekDayTitleAttributes ?: @{NSFontAttributeName:[UIFont systemFontOfSize:8], NSForegroundColorAttributeName:[UIColor grayColor]};
     self.monthCoverAttributes = appearance.monthCoverAttributes ?: @{NSFontAttributeName:[UIFont systemFontOfSize:30]};
-    self.monthCoverView.textAttributes = self.monthCoverAttributes;
+    self.monthCoverYearAttributes = appearance.monthCoverYearAttributes ?: self.monthCoverAttributes;
+    
+    self.monthCoverView.textMonthAttributes = self.monthCoverAttributes;
+    self.monthCoverView.textYearAttributes = self.monthCoverYearAttributes;
 }
 
 #pragma mark - public api
@@ -182,6 +182,30 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 {
     NSInteger item = [GLDateUtils daysBetween:self.firstDate and:date];
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:item inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:animated];
+}
+
+#pragma mark - restricted dates range
+
+- (void)setRestrictSelectionWithRange:(GLCalendarDateRange *)restrictSelectionWithRange
+{
+    _restrictSelectionWithRange = restrictSelectionWithRange;
+
+    // how many rows to put in 'inset' area
+
+    NSInteger insetRows = 10;
+    NSInteger weekDays  = 7;
+
+    NSInteger insetDays = insetRows * weekDays;
+
+    // adding extra rows to the date - 10 rows to the top, 10 to the bottom...
+    self.firstDate = [GLDateUtils dateByAddingDays:-insetDays toDate:restrictSelectionWithRange.beginDate];
+    self.lastDate  = [GLDateUtils dateByAddingDays: insetDays toDate:restrictSelectionWithRange.endDate];
+
+    CGFloat insetPoints = self.cellWidth * insetRows;
+
+    self.collectionView.contentInset = UIEdgeInsetsMake(-insetPoints-18, 0, -insetPoints, 0);
+
+    [self reload];
 }
 
 # pragma mark - getter & setter
