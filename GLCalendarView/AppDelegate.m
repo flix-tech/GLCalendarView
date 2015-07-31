@@ -50,7 +50,7 @@
     [GLCalendarDayCell appearance].todayLabelAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:[UIColor grayColor]};
 
     [GLCalendarDayCell appearance].dayDisabledLabelAttributes = @{
-                                                                  NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:UIColorFromRGB(0xAAAAAA)
+                                                                  NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:UIColorFromRGB(0xEEEEEE)
                                                                   };
     [GLCalendarDayCell appearance].monthLabelAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:12],
                                                             NSForegroundColorAttributeName:[UIColor grayColor]};
@@ -58,6 +58,9 @@
     [GLCalendarDayCell appearance].editCoverBorderWidth = 0;
     [GLCalendarDayCell appearance].editCoverBorderColor = UIColorFromRGB(0x366aac);
     [GLCalendarDayCell appearance].editCoverPointSize = 14;
+
+    [GLCalendarDayCell appearance].gridNormalColor    = [[UIColor lightGrayColor] colorWithAlphaComponent:0.3];
+    [GLCalendarDayCell appearance].gridSeparatorColor = [UIColor lightGrayColor];
     
 //    [GLCalendarDayCell appearance].todayBackgroundColor = nil;
 

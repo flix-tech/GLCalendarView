@@ -29,6 +29,8 @@ typedef NS_ENUM(NSInteger, RANGE_DISPLAY_MODE) {
 @interface GLCalendarDayCell : UICollectionViewCell
 @property (nonatomic, strong) UIColor *evenMonthBackgroundColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIColor *oddMonthBackgroundColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *gridNormalColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *gridSeparatorColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) NSDictionary *dayLabelAttributes UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) NSDictionary *futureDayLabelAttributes UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) NSDictionary *todayLabelAttributes UI_APPEARANCE_SELECTOR;

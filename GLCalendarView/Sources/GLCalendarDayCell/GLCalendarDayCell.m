@@ -49,6 +49,8 @@
     GLCalendarDayCell *appearance = [[self class] appearance];
     self.evenMonthBackgroundColor = appearance.evenMonthBackgroundColor ?: UIColorFromRGB(0xf8f8f8);
     self.oddMonthBackgroundColor = appearance.oddMonthBackgroundColor ?: [UIColor whiteColor];
+    self.gridNormalColor = appearance.gridNormalColor ?: [UIColor lightGrayColor];
+    self.gridSeparatorColor = appearance.gridSeparatorColor ?: [UIColor grayColor];
     self.dayLabelAttributes = appearance.dayLabelAttributes ?: @{NSFontAttributeName:[UIFont systemFontOfSize:20]};
     self.dayDisabledLabelAttributes = appearance.dayDisabledLabelAttributes?:@{NSFontAttributeName:[UIFont systemFontOfSize:20]};
     self.futureDayLabelAttributes = appearance.futureDayLabelAttributes ?: self.dayLabelAttributes;
@@ -104,13 +106,13 @@
     // default look
     self.lineLeft.hidden = YES;
     self.lineTop.hidden = YES;
-    self.lineBottom.backgroundColor = [UIColor lightGrayColor];
-    self.lineRight.backgroundColor = [UIColor lightGrayColor];
+    self.lineBottom.backgroundColor = self.gridNormalColor;
+    self.lineRight.backgroundColor = self.gridNormalColor;
 
     if (day > monthDays - 7) {
-        self.lineBottom.backgroundColor = [UIColor darkGrayColor];
+        self.lineBottom.backgroundColor = self.gridSeparatorColor;
         if (day == monthDays && self.position != POSITION_RIGHT_EDGE) {
-            self.lineRight.backgroundColor = [UIColor darkGrayColor];
+            self.lineRight.backgroundColor = self.gridSeparatorColor;
         }
     }
 
@@ -121,7 +123,7 @@
         self.backgroundCover.paddingLeft = self.containerPadding;
         self.backgroundCover.paddingRight = 0;
         self.lineLeft.hidden = NO;
-        self.lineLeft.backgroundColor = [UIColor lightGrayColor];
+        self.lineLeft.backgroundColor = self.gridNormalColor;
     } else if (self.position == POSITION_RIGHT_EDGE){
         self.backgroundCoverRight.constant = -self.containerPadding;
         self.backgroundCoverLeft.constant = 0;

@@ -59,12 +59,12 @@
 //    self.calendarView.ranges = [@[range1, range2] mutableCopy];
 //
 
-    self.calendarView.firstDate = [GLDateUtils dateByAddingDays: -90 toDate:[NSDate date]];
-    self.calendarView.lastDate  = [GLDateUtils dateByAddingDays: 300 toDate: self.calendarView.firstDate];
+//    self.calendarView.firstDate = [GLDateUtils dateByAddingDays: -90 toDate:[NSDate date]];
+//    self.calendarView.lastDate  = [GLDateUtils dateByAddingDays: 300 toDate: self.calendarView.firstDate];
 
     self.calendarView.restrictSelectionWithRange = [GLCalendarDateRange rangeWithBeginDate:[NSDate date] endDate:[GLDateUtils dateByAddingDays: 183 toDate: [NSDate date]]];
 
-    [self.calendarView reload];
+//    [self.calendarView reload];
 
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.calendarView scrollToDate:self.calendarView.lastDate animated:NO];
@@ -91,6 +91,7 @@
         [self.calendarView removeRange:obj];
     }];
 
+    NSLog(@"Selected: %@", range);
 
     return range;
 }
