@@ -38,6 +38,7 @@
 @property (nonatomic, strong) NSMutableArray *ranges;
 @property (nonatomic) BOOL showMaginfier;
 @property (nonatomic, weak) id<GLCalendarViewDelegate> delegate;
+@property (nonatomic, strong) GLCalendarDateRange *restrictSelectionWithRange;
 - (void)reload;
 - (void)addRange:(GLCalendarDateRange *)range;
 - (void)removeRange:(GLCalendarDateRange *)range;

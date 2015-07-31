@@ -93,6 +93,9 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     
     [self addSubview:self.magnifierContainer];
     self.magnifierContainer.hidden = YES;
+
+
+    self.collectionView.contentInset = UIEdgeInsetsMake(-self.cellWidth*13, 0, -600, 0);
     
     [self reloadAppearance];
 }
@@ -245,7 +248,13 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     } else {
         enlargePoint = ENLARGE_NONE;
     }
-    [cell setDate:date range:[self selectedRangeForDate:date] cellPosition:cellPosition enlargePoint:enlargePoint];
+
+    BOOL disabled = NO;
+    if (self.restrictSelectionWithRange) {
+        disabled = ![self.restrictSelectionWithRange containsDate: date];
+    }
+
+    [cell setDate:date range:[self selectedRangeForDate:date] cellPosition:cellPosition enlargePoint:enlargePoint disabled: disabled];
     
     return cell;
 }
