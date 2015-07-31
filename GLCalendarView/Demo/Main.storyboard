@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="pjR-1Q-QsB">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="pjR-1Q-QsB">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <scenes>
         <!--GLCalendarView-->
@@ -22,7 +22,7 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <navigationItem key="navigationItem" title="GLCalendarView" id="ygq-eb-slN">
-                        <barButtonItem key="rightBarButtonItem" title="delete" id="KmM-7H-oMa">
+                        <barButtonItem key="rightBarButtonItem" title="today" id="KmM-7H-oMa">
                             <connections>
                                 <action selector="deleteButtonPressed:" destination="vXZ-lx-hvc" id="wbA-5h-ZEM"/>
                             </connections>

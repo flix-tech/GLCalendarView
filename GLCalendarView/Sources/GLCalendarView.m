@@ -93,7 +93,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     
     [self addSubview:self.magnifierContainer];
     self.magnifierContainer.hidden = YES;
-    
+
     [self reloadAppearance];
 }
 
@@ -108,7 +108,10 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     [self.weekDayTitle.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     CGFloat width = (CGRectGetWidth(self.bounds) - self.padding * 2) / 7;
     CGFloat centerY = self.weekDayTitle.bounds.size.height / 2;
-    NSArray *titles = [[[NSDateFormatter alloc] init] veryShortStandaloneWeekdaySymbols];
+    NSArray *titles = self.calendar.veryShortStandaloneWeekdaySymbols;
+    if ([self.delegate respondsToSelector:@selector(calendarViewWeekDayTitles)]) {
+        titles = self.delegate.calendarViewWeekDayTitles;
+    }
     NSInteger firstWeekDayIdx = [self.calendar firstWeekday] - 1;  // Sunday == 1
     if (firstWeekDayIdx > 0) {
         NSArray *post = [titles subarrayWithRange:NSMakeRange(firstWeekDayIdx, 7 - firstWeekDayIdx)];
@@ -133,7 +136,10 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     self.rowHeight = appearance.rowHeight ?: DEFAULT_ROW_HEIGHT;
     self.weekDayTitleAttributes = appearance.weekDayTitleAttributes ?: @{NSFontAttributeName:[UIFont systemFontOfSize:8], NSForegroundColorAttributeName:[UIColor grayColor]};
     self.monthCoverAttributes = appearance.monthCoverAttributes ?: @{NSFontAttributeName:[UIFont systemFontOfSize:30]};
-    self.monthCoverView.textAttributes = self.monthCoverAttributes;
+    self.monthCoverYearAttributes = appearance.monthCoverYearAttributes ?: self.monthCoverAttributes;
+    
+    self.monthCoverView.textMonthAttributes = self.monthCoverAttributes;
+    self.monthCoverView.textYearAttributes = self.monthCoverYearAttributes;
 }
 
 #pragma mark - public api
@@ -176,6 +182,30 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 {
     NSInteger item = [GLDateUtils daysBetween:self.firstDate and:date];
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:item inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:animated];
+}
+
+#pragma mark - restricted dates range
+
+- (void)setRestrictSelectionWithRange:(GLCalendarDateRange *)restrictSelectionWithRange
+{
+    _restrictSelectionWithRange = restrictSelectionWithRange;
+
+    // how many rows to put in 'inset' area
+
+    NSInteger insetRows = 10;
+    NSInteger weekDays  = 7;
+
+    NSInteger insetDays = insetRows * weekDays;
+
+    // adding extra rows to the date - 10 rows to the top, 10 to the bottom...
+    self.firstDate = [GLDateUtils dateByAddingDays:-insetDays toDate:restrictSelectionWithRange.beginDate];
+    self.lastDate  = [GLDateUtils dateByAddingDays: insetDays toDate:restrictSelectionWithRange.endDate];
+
+    CGFloat insetPoints = self.cellWidth * insetRows;
+
+    self.collectionView.contentInset = UIEdgeInsetsMake(-insetPoints-18, 0, -insetPoints, 0);
+
+    [self reload];
 }
 
 # pragma mark - getter & setter
@@ -242,7 +272,13 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     } else {
         enlargePoint = ENLARGE_NONE;
     }
-    [cell setDate:date range:[self selectedRangeForDate:date] cellPosition:cellPosition enlargePoint:enlargePoint];
+
+    BOOL disabled = NO;
+    if (self.restrictSelectionWithRange) {
+        disabled = ![self.restrictSelectionWithRange containsDate: date];
+    }
+
+    [cell setDate:date range:[self selectedRangeForDate:date] cellPosition:cellPosition enlargePoint:enlargePoint disabled: disabled];
     
     return cell;
 }
