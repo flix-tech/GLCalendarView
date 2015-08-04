@@ -49,6 +49,13 @@
     return YES;
 }
 
+- (NSInteger) durationDays
+{
+    NSInteger days = [GLDateUtils daysBetween:self.beginDate and:self.endDate];
+
+    return days;
+}
+
 
 - (NSString *)description
 {

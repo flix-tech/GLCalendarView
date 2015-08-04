@@ -22,4 +22,5 @@
 @property (nonatomic, weak) id binding; // you can bind your model here
 + (instancetype)rangeWithBeginDate:(NSDate *)beginDate endDate:(NSDate *)endDate;
 - (BOOL)containsDate:(NSDate *)date;
+- (NSInteger) durationDays;
 @end

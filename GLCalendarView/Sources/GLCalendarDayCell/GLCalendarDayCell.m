@@ -152,7 +152,7 @@
     } else if (day == 1) {
         [self setDayLabelText:[NSString stringWithFormat:@"%ld", (long)day] withTopLabel: [self monthText:month]];
         self.backgroundCover.isToday = NO;
-    } else if(self.range){
+    } else if(self.range && self.range.durationDays < 1){
         [self setDayLabelText:[NSString stringWithFormat:@"%ld", (long)day] withTopLabel: [self monthText:month]];
         self.backgroundCover.isToday = NO;
     } else {
