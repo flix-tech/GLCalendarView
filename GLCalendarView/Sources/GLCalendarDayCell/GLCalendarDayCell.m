@@ -29,7 +29,6 @@
 @property (nonatomic) BOOL inEdit;
 @property (nonatomic) CGFloat containerPadding;
 
-@property (strong, nonatomic) IBOutlet UIView *lineTop;
 @property (strong, nonatomic) IBOutlet UIView *lineLeft;
 @property (strong, nonatomic) IBOutlet UIView *lineRight;
 @property (strong, nonatomic) IBOutlet UIView *lineBottom;
@@ -137,7 +136,7 @@
 
     // default look
     self.lineLeft.hidden = YES;
-    self.lineTop.hidden = YES;
+
     self.lineBottom.backgroundColor = self.gridNormalColor;
     self.lineRight.backgroundColor = self.gridNormalColor;
 
