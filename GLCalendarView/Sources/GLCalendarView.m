@@ -63,6 +63,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     [self addSubview:view];
     [self setup];
+    [self layoutSubviews];
 }
 
 - (void)setup
@@ -132,7 +133,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 - (void)reloadAppearance
 {
     GLCalendarView *appearance = [[self class] appearance];
-    self.padding = appearance.padding ?: DEFAULT_PADDING;
+    self.padding = appearance.padding;
     self.rowHeight = appearance.rowHeight ?: DEFAULT_ROW_HEIGHT;
     self.weekDayTitleAttributes = appearance.weekDayTitleAttributes ?: @{NSFontAttributeName:[UIFont systemFontOfSize:8], NSForegroundColorAttributeName:[UIColor grayColor]};
     self.monthCoverAttributes = appearance.monthCoverAttributes ?: @{NSFontAttributeName:[UIFont systemFontOfSize:30]};
@@ -181,7 +182,10 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 - (void)scrollToDate:(NSDate *)date animated:(BOOL)animated;
 {
     NSInteger item = [GLDateUtils daysBetween:self.firstDate and:date];
-    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:item inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:animated];
+
+    CGPoint offset = CGPointMake(0, (item/7)*self.rowHeight);
+
+    [self.collectionView setContentOffset: offset animated:YES];
 }
 
 #pragma mark - restricted dates range
@@ -192,6 +196,12 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
     // how many rows to put in 'inset' area
 
+    if (!_restrictSelectionWithRange) {
+        // we cancelled restrictions
+        self.collectionView.contentInset = UIEdgeInsetsZero;
+        return;
+    }
+
     NSInteger insetRows = 10;
     NSInteger weekDays  = 7;
 
@@ -201,11 +211,14 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     self.firstDate = [GLDateUtils dateByAddingDays:-insetDays toDate:restrictSelectionWithRange.beginDate];
     self.lastDate  = [GLDateUtils dateByAddingDays: insetDays toDate:restrictSelectionWithRange.endDate];
 
-    CGFloat insetPoints = self.cellWidth * insetRows;
+    CGFloat cellHeight = [GLCalendarView appearance].rowHeight ?: self.cellWidth;
+    CGFloat insetHeight = cellHeight * insetRows;
 
-    self.collectionView.contentInset = UIEdgeInsetsMake(-insetPoints-18, 0, -insetPoints, 0);
+    self.collectionView.contentInset = UIEdgeInsetsMake(-insetHeight, 0, -insetHeight, 0);
 
     [self reload];
+
+    [self scrollToDate:self.restrictSelectionWithRange.beginDate animated:NO];
 }
 
 # pragma mark - getter & setter

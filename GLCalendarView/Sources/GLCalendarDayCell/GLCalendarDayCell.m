@@ -241,13 +241,24 @@
 {
     NSString* topNewLine = [top stringByAppendingString:@"\n"];
 
+    UIColor* todayTextColor = self.todayLabelAttributes[NSForegroundColorAttributeName];
+
+    if (self.disabled) {
+        todayTextColor = self.dayDisabledLabelAttributes[NSForegroundColorAttributeName];
+    }
+
     NSDictionary *todayTopLabelAttributes = @{
                                               NSFontAttributeName: self.monthLabelAttributes[NSFontAttributeName],
                                               NSForegroundColorAttributeName: self.todayLabelAttributes[NSForegroundColorAttributeName]
                                               };
 
+    NSDictionary* todayDayLabelAttributes = @{
+                                              NSFontAttributeName: self.todayLabelAttributes[NSFontAttributeName],
+                                              NSForegroundColorAttributeName: todayTextColor
+                                              };
+
     NSAttributedString* topString = [[NSAttributedString alloc] initWithString:topNewLine attributes:todayTopLabelAttributes];
-    NSAttributedString* dayString = [[NSAttributedString alloc] initWithString:text attributes:self.todayLabelAttributes];
+    NSAttributedString* dayString = [[NSAttributedString alloc] initWithString:text attributes:todayDayLabelAttributes];
 
     NSMutableAttributedString* res = [[NSMutableAttributedString alloc] initWithAttributedString: topString];
 
