@@ -42,7 +42,7 @@
 {
     [super viewWillAppear:YES];
     
-//    NSDate *today = [NSDate date];
+    NSDate *today = [NSDate date];
 
 //    NSDate *beginDate1 = [GLDateUtils dateByAddingDays:-32 toDate:today];
 //    NSDate *endDate1 = [GLDateUtils dateByAddingDays:-26 toDate:today];
@@ -50,13 +50,13 @@
 //    range1.backgroundColor = UIColorFromRGB(0x79a9cd);
 //    range1.editable = YES;
 //    
-//    NSDate *beginDate2 = [GLDateUtils dateByAddingDays:-6 toDate:today];
-//    NSDate *endDate2 = [GLDateUtils dateByAddingDays:-3 toDate:today];
-//    GLCalendarDateRange *range2 = [GLCalendarDateRange rangeWithBeginDate:beginDate2 endDate:endDate2];
-//    range2.backgroundColor = UIColorFromRGB(0x79a9cd);
-//    range2.editable = YES;
+    NSDate *beginDate2 = [GLDateUtils dateByAddingDays:3 toDate:today];
+    NSDate *endDate2 = [GLDateUtils dateByAddingDays:4 toDate:today];
+    GLCalendarDateRange *range2 = [GLCalendarDateRange rangeWithBeginDate:beginDate2 endDate:endDate2];
+    range2.backgroundColor = UIColorFromRGB(0x79a9cd);
+    range2.editable = NO;
 //
-//    self.calendarView.ranges = [@[range1, range2] mutableCopy];
+    self.calendarView.ranges = [@[range2] mutableCopy];
 //
 
 //    self.calendarView.firstDate = [GLDateUtils dateByAddingDays: -90 toDate:[NSDate date]];
