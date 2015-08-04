@@ -152,9 +152,11 @@
     } else if (day == 1) {
         [self setDayLabelText:[NSString stringWithFormat:@"%ld", (long)day] withTopLabel: [self monthText:month]];
         self.backgroundCover.isToday = NO;
+    } else if(self.range){
+        [self setDayLabelText:[NSString stringWithFormat:@"%ld", (long)day] withTopLabel: [self monthText:month]];
+        self.backgroundCover.isToday = NO;
     } else {
         [self setDayLabelText:[NSString stringWithFormat:@"%ld", (long)day] withTopLabel: nil];
-        self.backgroundCover.isToday = NO;
     }
     
     // background cover
