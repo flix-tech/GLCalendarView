@@ -8,36 +8,31 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="GLCalendarDayCell">
-            <rect key="frame" x="0.0" y="0.0" width="462" height="488"/>
-            <autoresizingMask key="autoresizingMask"/>
+            <rect key="frame" x="0.0" y="0.0" width="46" height="46"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="462" height="488"/>
+                <rect key="frame" x="0.0" y="0.0" width="46" height="46"/>
                 <subviews>
-                    <view contentMode="scaleToFill" id="HQX-TK-Jgx" userLabel="background cover" customClass="GLCalendarDayCellBackgroundCover">
-                        <rect key="frame" x="0.0" y="0.0" width="462" height="488"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Qzu-El-Gfs" userLabel="day label">
+                        <rect key="frame" x="0.0" y="0.0" width="46" height="46"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Qzu-El-Gfs" userLabel="day label">
-                        <rect key="frame" x="0.0" y="0.0" width="462" height="488"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <view contentMode="scaleToFill" id="OJ0-az-cxp" userLabel="lineLeft">
-                        <rect key="frame" x="0.0" y="0.0" width="1" height="488"/>
+                    <view hidden="YES" contentMode="scaleToFill" id="OJ0-az-cxp" userLabel="lineLeft">
+                        <rect key="frame" x="0.0" y="0.0" width="1" height="46"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <view contentMode="scaleToFill" id="yzE-i8-gMt" userLabel="lineRight">
-                        <rect key="frame" x="461" y="0.0" width="1" height="488"/>
+                        <rect key="frame" x="45" y="0.0" width="1" height="46"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <view contentMode="scaleToFill" id="vkn-U1-ouN" userLabel="lineBottom">
-                        <rect key="frame" x="0.0" y="487" width="461" height="1"/>
+                        <rect key="frame" x="0.0" y="45" width="45" height="1"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -47,7 +42,6 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <size key="customSize" width="462" height="488"/>
             <connections>
-                <outlet property="backgroundCover" destination="HQX-TK-Jgx" id="CwL-Wf-smS"/>
                 <outlet property="dayLabel" destination="Qzu-El-Gfs" id="U7r-Ur-qvJ"/>
                 <outlet property="lineBottom" destination="vkn-U1-ouN" id="CQ7-eB-INg"/>
                 <outlet property="lineLeft" destination="OJ0-az-cxp" id="ajm-gT-oke"/>

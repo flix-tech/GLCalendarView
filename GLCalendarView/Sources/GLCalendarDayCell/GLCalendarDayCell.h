@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @class GLCalendarDateRange;
+@class GLCalendarDate;
 
 typedef NS_ENUM(NSInteger, CELL_POSITION) {
     POSITION_NORMAL = 0,
@@ -45,9 +46,9 @@ typedef NS_ENUM(NSInteger, RANGE_DISPLAY_MODE) {
 @property (nonatomic) CGFloat editCoverPointScale UI_APPEARANCE_SELECTOR;
 @property (nonatomic) RANGE_DISPLAY_MODE rangeDisplayMode UI_APPEARANCE_SELECTOR;
 
-@property (nonatomic, readonly) NSDate *date;
+@property (nonatomic, readonly) GLCalendarDate *date;
 @property (nonatomic, weak, readonly) GLCalendarDateRange *range;
 @property (nonatomic, readonly) BOOL disabled;
 
-- (void)setDate:(NSDate *)date range:(GLCalendarDateRange *)range cellPosition:(CELL_POSITION)cellPosition enlargePoint:(ENLARGE_POINT)enlargePoint disabled: (BOOL) disabled;
+- (void)setDate:(GLCalendarDate *)date range:(GLCalendarDateRange *)range cellPosition:(CELL_POSITION)cellPosition enlargePoint:(ENLARGE_POINT)enlargePoint disabled: (BOOL) disabled;
 @end

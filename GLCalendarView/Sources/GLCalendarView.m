@@ -10,11 +10,12 @@
 #import "GLCalendarDayCell.h"
 #import "GLCalendarMonthCoverView.h"
 #import "GLDateUtils.h"
+#import "GLCalendarDate.h"
 
 static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
 #define DEFAULT_PADDING 6;
-#define DEFAULT_ROW_HEIGHT 54;
+#define DEFAULT_ROW_HEIGHT 46;
 
 @interface GLCalendarView()<UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic, readwrite) NSCalendar *calendar;
@@ -31,6 +32,9 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 @property (weak, nonatomic) IBOutlet GLCalendarMonthCoverView *monthCoverView;
 @property (weak, nonatomic) IBOutlet UIView *magnifierContainer;
 @property (weak, nonatomic) IBOutlet UIImageView *maginifierContentView;
+
+@property (strong, nonatomic) NSMutableDictionary* cellDates;
+
 @end
 
 @implementation GLCalendarView
@@ -63,7 +67,6 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     view.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     [self addSubview:view];
     [self setup];
-    [self layoutSubviews];
 }
 
 - (void)setup
@@ -78,7 +81,9 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
-    [self.collectionView registerNib:[UINib nibWithNibName:@"GLCalendarDayCell" bundle:nil] forCellWithReuseIdentifier:CELL_REUSE_IDENTIFIER];
+//    [self.collectionView registerNib:[UINib nibWithNibName:@"GLCalendarDayCell" bundle:nil] forCellWithReuseIdentifier:CELL_REUSE_IDENTIFIER];
+
+    [self.collectionView registerClass:[GLCalendarDayCell class] forCellWithReuseIdentifier:CELL_REUSE_IDENTIFIER];
     
     self.dragBeginDateGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleDragBeginDate:)];
     self.dragEndDateGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleDragEndDate:)];
@@ -202,7 +207,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
         return;
     }
 
-    NSInteger insetRows = 10;
+    NSInteger insetRows = 6;
     NSInteger weekDays  = 7;
 
     NSInteger insetDays = insetRows * weekDays;
@@ -225,7 +230,11 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
 - (void)setFirstDate:(NSDate *)firstDate
 {
-    _firstDate = [GLDateUtils weekFirstDate:[GLDateUtils cutDate:firstDate]];
+    NSDate* newDate = [GLDateUtils weekFirstDate:[GLDateUtils cutDate:firstDate]];
+    if (!_firstDate || [_firstDate compare:newDate] != NSOrderedSame) {
+        self.cellDates = [NSMutableDictionary dictionaryWithCapacity:366];
+    }
+    _firstDate = newDate;
 }
 
 - (NSDate *)firstDate
@@ -264,7 +273,9 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     GLCalendarDayCell *cell = (GLCalendarDayCell *)[collectionView dequeueReusableCellWithReuseIdentifier:CELL_REUSE_IDENTIFIER forIndexPath:indexPath];
-    
+
+//    return cell;
+
     CELL_POSITION cellPosition;
     ENLARGE_POINT enlargePoint;
     
@@ -277,10 +288,12 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
         cellPosition = POSITION_NORMAL;
     }
     
-    NSDate *date = [self dateForCellAtIndexPath:indexPath];
-    if (self.draggingBeginDate && [GLDateUtils date:self.rangeUnderEdit.beginDate isSameDayAsDate:date]) {
+    GLCalendarDate *date = [self dateForCellAtIndexPath:indexPath];
+
+    if (self.draggingBeginDate && [date isTheSameDayAsDate:self.rangeUnderEdit.beginDate]) {
         enlargePoint = ENLARGE_BEGIN_POINT;
-    } else if (self.draggingEndDate && [GLDateUtils date:self.rangeUnderEdit.endDate isSameDayAsDate:date]) {
+
+    } else if (self.draggingEndDate && [date isTheSameDayAsDate:self.rangeUnderEdit.endDate]) {
         enlargePoint = ENLARGE_END_POINT;
     } else {
         enlargePoint = ENLARGE_NONE;
@@ -288,18 +301,39 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
     BOOL disabled = NO;
     if (self.restrictSelectionWithRange) {
-        disabled = ![self.restrictSelectionWithRange containsDate: date];
+        disabled = ![self.restrictSelectionWithRange containsDate: date.date];
     }
 
-    [cell setDate:date range:[self selectedRangeForDate:date] cellPosition:cellPosition enlargePoint:enlargePoint disabled: disabled];
+    [cell setDate:date range:[self selectedRangeForDate:date.date] cellPosition:cellPosition enlargePoint:enlargePoint disabled: disabled];
     
     return cell;
 }
 
-- (NSDate *)dateForCellAtIndexPath:(NSIndexPath *)indexPath
+//- (NSDate *)dateForCellAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    return [GLDateUtils dateByAddingDays:indexPath.item toDate:self.firstDate];
+//}
+
+- (GLCalendarDate*) dateForCellAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [GLDateUtils dateByAddingDays:indexPath.item toDate:self.firstDate];
+//    if (!self.cellDates) {
+//        self.cellDates = [NSMutableArray array];
+//    }
+//    if (self.cellDates.count - 1 < indexPath.item) {
+//
+//    }
+    GLCalendarDate* gldate = [self.cellDates objectForKey: indexPath];
+    if (!gldate) {
+        NSDate* date = [GLDateUtils dateByAddingDays:indexPath.item toDate:self.firstDate];
+        gldate = [[GLCalendarDate alloc] initWithDate: date];
+        [self.cellDates setObject:gldate forKey:indexPath];
+    }
+
+    return gldate;
+//    return [self.cellDates objectAtIndex: indexPath.item];
+//    return [GLDateUtils dateByAddingDays:indexPath.item toDate:self.firstDate];
 }
+
 
 - (GLCalendarDateRange *)selectedRangeForDate:(NSDate *)date
 {
@@ -315,8 +349,8 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDate *date = [self dateForCellAtIndexPath:indexPath];
-    GLCalendarDateRange *range = [self selectedRangeForDate:date];
+    GLCalendarDate *date = [self dateForCellAtIndexPath:indexPath];
+    GLCalendarDateRange *range = [self selectedRangeForDate:date.date];
     
     // if click in a range
     if (range && range.editable) {
@@ -332,9 +366,9 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
         if (self.rangeUnderEdit) {
             [self finishEditRange:self.rangeUnderEdit continueEditing:NO];
         } else {
-            BOOL canAdd = [self.delegate calenderView:self canAddRangeWithBeginDate:date];
+            BOOL canAdd = [self.delegate calenderView:self canAddRangeWithBeginDate:date.date];
             if (canAdd) {
-                GLCalendarDateRange *rangeToAdd = [self.delegate calenderView:self rangeToAddWithBeginDate:date];
+                GLCalendarDateRange *rangeToAdd = [self.delegate calenderView:self rangeToAddWithBeginDate:date.date];
                 [self addRange:rangeToAdd];
             }
         }
@@ -360,7 +394,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake(self.cellWidth, self.rowHeight);
+    return CGSizeMake( self.cellWidth, self.rowHeight);
 }
 
 - (CGFloat)cellWidth
@@ -462,28 +496,27 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
         return;
     }
     
-    NSDate *date = [self dateAtLocation:location];
-    
-    if ([GLDateUtils date:self.rangeUnderEdit.beginDate isSameDayAsDate:date]) {
+    GLCalendarDate *date = [self dateAtLocation:location];
+    if ([date isTheSameDayAsDate: self.rangeUnderEdit.beginDate]) {
         return;
     }
     
-    if ([self.rangeUnderEdit.endDate compare:date] == NSOrderedAscending) {
+    if ([self.rangeUnderEdit.endDate compare:date.date] == NSOrderedAscending) {
         return;
     }
     
-    BOOL canUpdate = [self.delegate calenderView:self canUpdateRange:self.rangeUnderEdit toBeginDate:date endDate:self.rangeUnderEdit.endDate];
+    BOOL canUpdate = [self.delegate calenderView:self canUpdateRange:self.rangeUnderEdit toBeginDate:date.date endDate:self.rangeUnderEdit.endDate];
     
     if (canUpdate) {
         NSDate *originalBeginDate = [self.rangeUnderEdit.beginDate copy];
-        self.rangeUnderEdit.beginDate = date;
-        if ([originalBeginDate compare:date] == NSOrderedAscending) {
-            [self reloadFromBeginDate:originalBeginDate toDate:date];
+        self.rangeUnderEdit.beginDate = date.date;
+        if ([originalBeginDate compare:date.date] == NSOrderedAscending) {
+            [self reloadFromBeginDate:originalBeginDate toDate:date.date];
         } else {
-            [self reloadFromBeginDate:date toDate:originalBeginDate];
+            [self reloadFromBeginDate:date.date toDate:originalBeginDate];
         }
         [self showMagnifierAboveDate:self.rangeUnderEdit.beginDate];
-        [self.delegate calenderView:self didUpdateRange:self.rangeUnderEdit toBeginDate:date endDate:self.rangeUnderEdit.endDate];
+        [self.delegate calenderView:self didUpdateRange:self.rangeUnderEdit toBeginDate:date.date endDate:self.rangeUnderEdit.endDate];
     }
 }
 
@@ -507,27 +540,27 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
         return;
     }
     
-    NSDate *date = [self dateAtLocation:location];
+    GLCalendarDate *date = [self dateAtLocation:location];
 
-    if ([GLDateUtils date:self.rangeUnderEdit.endDate isSameDayAsDate:date]) {
+    if ([date isTheSameDayAsDate: self.rangeUnderEdit.endDate]) {
         return;
     }
-    if ([date compare:self.rangeUnderEdit.beginDate] == NSOrderedAscending) {
+    if ([date.date compare:self.rangeUnderEdit.beginDate] == NSOrderedAscending) {
         return;
     }
     
-    BOOL canUpdate = [self.delegate calenderView:self canUpdateRange:self.rangeUnderEdit toBeginDate:self.rangeUnderEdit.beginDate endDate:date];
+    BOOL canUpdate = [self.delegate calenderView:self canUpdateRange:self.rangeUnderEdit toBeginDate:self.rangeUnderEdit.beginDate endDate:date.date];
     
     if (canUpdate) {
         NSDate *originalEndDate = [self.rangeUnderEdit.endDate copy];
-        self.rangeUnderEdit.endDate = date;
-        if ([originalEndDate compare:date] == NSOrderedAscending) {
-            [self reloadFromBeginDate:originalEndDate toDate:date];
+        self.rangeUnderEdit.endDate = date.date;
+        if ([originalEndDate compare:date.date] == NSOrderedAscending) {
+            [self reloadFromBeginDate:originalEndDate toDate:date.date];
         } else {
-            [self reloadFromBeginDate:date toDate:originalEndDate];
+            [self reloadFromBeginDate:date.date toDate:originalEndDate];
         }
         [self showMagnifierAboveDate:self.rangeUnderEdit.endDate];
-        [self.delegate calenderView:self didUpdateRange:self.rangeUnderEdit toBeginDate:self.rangeUnderEdit.beginDate endDate:date];
+        [self.delegate calenderView:self didUpdateRange:self.rangeUnderEdit toBeginDate:self.rangeUnderEdit.beginDate endDate:date.date];
     }
 }
 
@@ -582,7 +615,7 @@ static NSDate *today;
     return today;
 }
 
-- (NSDate *)dateAtLocation:(CGPoint)location
+- (GLCalendarDate *)dateAtLocation:(CGPoint)location
 {
     return [self dateForCellAtIndexPath:[self indexPathAtLocation:location]];
 }

@@ -39,7 +39,8 @@
     [GLCalendarView appearance].monthCoverYearAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:24],
                                                          NSForegroundColorAttributeName:[UIColor grayColor]};
 
-    [GLCalendarDayCell appearance].evenMonthBackgroundColor = [UIColor whiteColor];//UIColorFromRGB(0xf5f5f5);
+    [GLCalendarDayCell appearance].evenMonthBackgroundColor = [UIColor whiteColor];
+    [GLCalendarDayCell appearance].oddMonthBackgroundColor = [UIColor whiteColor];
 
     [GLCalendarDayCell appearance].editCoverPadding = 0;
 
@@ -47,7 +48,7 @@
 
     [GLCalendarDayCell appearance].dayLabelAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:UIColorFromRGB(0x555555)};
 
-    [GLCalendarDayCell appearance].todayLabelAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:[UIColor grayColor]};
+    [GLCalendarDayCell appearance].todayLabelAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:[UIColor whiteColor]};
 
     [GLCalendarDayCell appearance].dayDisabledLabelAttributes = @{
                                                                   NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:UIColorFromRGB(0xEEEEEE)

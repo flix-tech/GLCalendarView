@@ -12,17 +12,18 @@
 #import "GLDateUtils.h"
 #import "GLCalendarView.h"
 #import "GLCalendarDayCell.h"
+#import "GLCalendarDate.h"
 
 #define UIColorFromRGB(rgbValue) \
 [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 
 @interface GLCalendarDayCell()
-@property (weak, nonatomic) IBOutlet UILabel *dayLabel;
+@property (strong, nonatomic) IBOutlet UILabel *dayLabel;
 //@property (weak, nonatomic) IBOutlet UILabel *monthLabel;
-@property (weak, nonatomic) IBOutlet GLCalendarDayCellBackgroundCover *backgroundCover;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *backgroundCoverLeft;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *backgroundCoverRight;
+//@property (weak, nonatomic) IBOutlet UIView *backgroundView;
+//@property (weak, nonatomic) IBOutlet NSLayoutConstraint *backgroundCoverLeft;
+//@property (weak, nonatomic) IBOutlet NSLayoutConstraint *backgroundCoverRight;
 
 @property (nonatomic) CELL_POSITION position;
 @property (nonatomic) ENLARGE_POINT enlargePoint;
@@ -43,38 +44,30 @@
 
 @implementation GLCalendarDayCell
 
-//- (void)awakeFromNib
-//{
-//    [super awakeFromNib];
-////    [self reloadAppearance];
-//}
+- (instancetype) initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        frame.origin.x = 0;
+        frame.origin.y = 0;
+        CGFloat width = CGRectGetWidth(frame);
+        CGFloat heigh = CGRectGetHeight(frame);
+        CGFloat lineWidth = 1.f / [UIScreen mainScreen].scale;
+        self.dayLabel = [[UILabel alloc] initWithFrame: frame];
+        self.dayLabel.textAlignment = NSTextAlignmentCenter;
+        self.dayLabel.numberOfLines = 2;
+        [self.contentView addSubview: self.dayLabel];
 
-//- (void)reloadAppearance
-//{
-//    GLCalendarDayCell *appearance = [[self class] appearance];
-//    self.evenMonthBackgroundColor = appearance.evenMonthBackgroundColor ?: UIColorFromRGB(0xf8f8f8);
-//    self.oddMonthBackgroundColor = appearance.oddMonthBackgroundColor ?: [UIColor whiteColor];
-//    self.gridNormalColor = appearance.gridNormalColor ?: [UIColor lightGrayColor];
-//    self.gridSeparatorColor = appearance.gridSeparatorColor ?: [UIColor grayColor];
-//    self.dayLabelAttributes = appearance.dayLabelAttributes ?: @{NSFontAttributeName:[UIFont systemFontOfSize:20]};
-//    self.dayDisabledLabelAttributes = appearance.dayDisabledLabelAttributes?:@{NSFontAttributeName:[UIFont systemFontOfSize:20]};
-//    self.futureDayLabelAttributes = appearance.futureDayLabelAttributes ?: self.dayLabelAttributes;
-//    self.monthLabelAttributes = appearance.monthLabelAttributes ?: @{NSFontAttributeName:[UIFont systemFontOfSize:8]};
-//    self.todayLabelAttributes = appearance.todayLabelAttributes ?: @{NSFontAttributeName:[UIFont boldSystemFontOfSize:22]};
-//    
-//    self.backgroundCover.paddingTop = appearance.editCoverPadding;
-//    self.backgroundCover.borderWidth = appearance.editCoverBorderWidth;
-//    self.backgroundCover.strokeColor = appearance.editCoverBorderColor ?: [UIColor darkGrayColor];
-//    
-//    self.backgroundCover.pointSize = appearance.editCoverPointSize;
-//    self.backgroundCover.pointScale = appearance.editCoverPointScale ?: 1.3;
-//    
-//    RANGE_DISPLAY_MODE mode = appearance.rangeDisplayMode ?: RANGE_DISPLAY_MODE_SINGLE;
-//    self.backgroundCover.continuousRangeDisplay = mode == RANGE_DISPLAY_MODE_CONTINUOUS ? YES : NO;
-//    
-//    self.todayBackgroundColor = appearance.todayBackgroundColor;
-//    self.containerPadding = [GLCalendarView appearance].padding;
-//}
+        self.lineLeft = [[UIView alloc] initWithFrame: CGRectMake(0, 0, lineWidth, width)];
+        self.lineBottom = [[UIView alloc] initWithFrame: CGRectMake(0, heigh, width, lineWidth)];
+        self.lineRight =  [[UIView alloc] initWithFrame: CGRectMake(width - lineWidth, 0, lineWidth, heigh)];
+
+        [self.contentView addSubview: self.lineLeft];
+        [self.contentView addSubview: self.lineRight];
+        [self.contentView addSubview: self.lineBottom];
+    }
+    return self;
+}
 
 - (void)layoutSubviews
 {
@@ -96,7 +89,7 @@
     [super layoutSubviews];
 }
 
-- (void)setDate:(NSDate *)date range:(GLCalendarDateRange *)range cellPosition:(CELL_POSITION)cellPosition enlargePoint:(ENLARGE_POINT)enlargePoint disabled: (BOOL) disabled
+- (void)setDate:(GLCalendarDate *)date range:(GLCalendarDateRange *)range cellPosition:(CELL_POSITION)cellPosition enlargePoint:(ENLARGE_POINT)enlargePoint disabled: (BOOL) disabled
 {
     _date = [date copy];
     _range = range;
@@ -121,71 +114,51 @@
 {
 //    NSLog(@"update ui: %@ %d", [GLDateUtils descriptionForDate:self.date], _enlargePoint);
 
-    NSDateComponents *components = [[GLDateUtils calendar] components:NSCalendarUnitDay|NSCalendarUnitMonth fromDate:self.date];
-    
-    NSInteger day = components.day;
-    NSInteger month = components.month;
-    NSInteger monthDays = [[GLDateUtils calendar] rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:self.date].length;
+//    NSDateComponents *components = [[GLDateUtils calendar] components:NSCalendarUnitDay|NSCalendarUnitMonth fromDate:self.date];
+//    
+    NSInteger day = self.date.day;
+    NSInteger month = self.date.month;
+//    NSInteger monthDays = [[GLDateUtils calendar] rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:self.date].length;
 
     // month background color
     if (month % 2 == 0) {
-        self.backgroundCover.backgroundColor = self.evenMonthBackgroundColor;
+        self.dayLabel.backgroundColor = self.evenMonthBackgroundColor;
     } else {
-        self.backgroundCover.backgroundColor = self.oddMonthBackgroundColor;
+        self.dayLabel.backgroundColor = self.oddMonthBackgroundColor;
     }
 
-    // default look
-    self.lineLeft.hidden = YES;
-
-    self.lineBottom.backgroundColor = self.gridNormalColor;
-    self.lineRight.backgroundColor = self.gridNormalColor;
-
-    if (day > monthDays - 7) {
+    if (self.date.day > self.date.monthDays - 7) {
         self.lineBottom.backgroundColor = self.gridSeparatorColor;
-        if (day == monthDays && self.position != POSITION_RIGHT_EDGE) {
+        if (self.date.day == self.date.monthDays && self.position != POSITION_RIGHT_EDGE) {
             self.lineRight.backgroundColor = self.gridSeparatorColor;
+        } else {
+            self.lineRight.backgroundColor = self.gridNormalColor;
         }
+    } else {
+        self.lineBottom.backgroundColor = self.gridNormalColor;
+        self.lineRight.backgroundColor = self.gridNormalColor;
     }
 
     // adjust background position
     if (self.position == POSITION_LEFT_EDGE) {
-        self.backgroundCoverRight.constant = 0;
-        self.backgroundCoverLeft.constant = -self.containerPadding;
-        self.backgroundCover.paddingLeft = self.containerPadding;
-        self.backgroundCover.paddingRight = 0;
         self.lineLeft.hidden = NO;
         self.lineLeft.backgroundColor = self.gridNormalColor;
-    } else if (self.position == POSITION_RIGHT_EDGE){
-        self.backgroundCoverRight.constant = -self.containerPadding;
-        self.backgroundCoverLeft.constant = 0;
-        self.backgroundCover.paddingLeft = 0;
-        self.backgroundCover.paddingRight = self.containerPadding;
     } else {
-        self.backgroundCoverRight.constant = 0;
-        self.backgroundCoverLeft.constant = 0;
-        self.backgroundCover.paddingLeft = 0;
-        self.backgroundCover.paddingRight = 0;
+        self.lineLeft.hidden = YES;
     }
         
     // day label and month label
     if ([self isToday]) {
-        NSDateFormatter *todayFormatter = [[NSDateFormatter alloc] init];
-        todayFormatter.dateStyle = NSDateFormatterMediumStyle;
-        todayFormatter.timeStyle = NSDateFormatterNoStyle;
-        todayFormatter.doesRelativeDateFormatting = YES;
-        [self setTodayLabelText:[NSString stringWithFormat:@"%ld", (long)day] withTopLabel:[todayFormatter stringFromDate:[NSDate date]]];
-        self.backgroundCover.isToday = YES;
+        [self setTodayLabelText:[NSString stringWithFormat:@"%ld", (long)day] withTopLabel:[self today]];
         if (self.todayBackgroundColor) {
-            self.backgroundCover.fillColor = self.todayBackgroundColor;
+            self.dayLabel.backgroundColor = self.todayBackgroundColor;
         } else {
-            self.backgroundCover.fillColor = self.backgroundCover.backgroundColor;
+            self.dayLabel.backgroundColor = [UIColor whiteColor];
         }
-    } else if (day == 1) {
+    } else if(day == 1) {
         [self setDayLabelText:[NSString stringWithFormat:@"%ld", (long)day] withTopLabel: [self monthText:month]];
-        self.backgroundCover.isToday = NO;
-    } else if(self.range && self.range.durationDays < 1){
-        [self setDayLabelText:[NSString stringWithFormat:@"%ld", (long)day] withTopLabel: [self monthText:month]];
-        self.backgroundCover.isToday = NO;
+    } else if (  self.range && self.range.durationDays < 1 ) {
+
     } else {
         [self setDayLabelText:[NSString stringWithFormat:@"%ld", (long)day] withTopLabel: nil];
     }
@@ -193,44 +166,7 @@
     // background cover
     if (self.range) {
         // configure look when in range
-        self.backgroundCover.fillColor = self.range.backgroundColor ?: [UIColor clearColor];
-        self.backgroundCover.backgroundImage = self.range.backgroundImage ?: nil;
-        UIColor *textColor = self.range.textColor ?: [UIColor whiteColor];
-//        self.monthLabel.textColor = textColor;
-        self.dayLabel.textColor = textColor;
-        
-        // check position in range
-        BOOL isBeginDate = [GLDateUtils date:self.date isSameDayAsDate:self.range.beginDate];
-        BOOL isEndDate = [GLDateUtils date:self.date isSameDayAsDate:self.range.endDate];
-        
-        if (isBeginDate && isEndDate) {
-            self.backgroundCover.rangePosition = RANGE_POSITION_SINGLE;
-            [self.superview bringSubviewToFront:self];
-        } else if (isBeginDate) {
-            self.backgroundCover.rangePosition = RANGE_POSITION_BEGIN;
-            [self.superview bringSubviewToFront:self];
-        } else if (isEndDate) {
-            self.backgroundCover.rangePosition = RANGE_POSITION_END;
-            [self.superview bringSubviewToFront:self];
-        } else {
-            self.backgroundCover.rangePosition = RANGE_POSITION_MIDDLE;
-        }
-    } else {
-        self.backgroundCover.rangePosition = RANGE_POSITION_NONE;
-//        [self.superview sendSubviewToBack:self];
-    }
-    
-    self.backgroundCover.inEdit = self.inEdit;
-    
-    if (self.enlargePoint == ENLARGE_BEGIN_POINT) {
-        [self.backgroundCover enlargeBeginPoint:YES];
-        [self.backgroundCover enlargeEndPoint:NO];
-    } else if (self.enlargePoint == ENLARGE_END_POINT) {
-        [self.backgroundCover enlargeBeginPoint:NO];
-        [self.backgroundCover enlargeEndPoint:YES];
-    } else {
-        [self.backgroundCover enlargeBeginPoint:NO];
-        [self.backgroundCover enlargeEndPoint:NO];
+        self.dayLabel.backgroundColor = self.range.backgroundColor ?: [UIColor whiteColor];
     }
 }
 
@@ -247,7 +183,29 @@
 
 - (void)updateDayLabelText:(NSString *)text withTopLabel: (NSString*) top
 {
+
+//    if (text) {
+//        NSString* title = text;
+//        if (top) {
+//            title = [title stringByAppendingFormat:@"\n%@",top];
+//        }
+//        self.dayLabel.text = title;
+//        return;
+//    } else {
+//        return;
+//    }
+
+    UIColor* textColor = self.range.textColor;
+
     NSDictionary* attributes = self.disabled ? self.dayDisabledLabelAttributes : self.dayLabelAttributes;
+
+    if (textColor) {
+        attributes = @{
+                       NSFontAttributeName: attributes[NSFontAttributeName],
+                       NSForegroundColorAttributeName: textColor
+                       };
+    }
+
     NSAttributedString* dayString = [[NSAttributedString alloc] initWithString:text attributes: attributes];
 
     NSAttributedString* topString;
@@ -255,7 +213,16 @@
     if (top) {
         NSString* topNewLine = [top stringByAppendingString:@"\n"];
 
-        topString = [[NSAttributedString alloc] initWithString:topNewLine attributes:self.monthLabelAttributes];
+        NSDictionary* topAttributes = self.monthLabelAttributes;
+
+        if (textColor) {
+            topAttributes = @{
+                              NSFontAttributeName: topAttributes[NSFontAttributeName],
+                              NSForegroundColorAttributeName: textColor
+                              };
+        }
+
+        topString = [[NSAttributedString alloc] initWithString:topNewLine attributes:topAttributes];
     }
 
     NSMutableAttributedString* res = [[NSMutableAttributedString alloc] init];
@@ -326,13 +293,13 @@
 
 - (BOOL)isToday
 {
-    return [GLDateUtils date:self.date isSameDayAsDate:[NSDate date]];
+    return [self.date isTheSameDayAsDate:[NSDate date]];
 }
 
-- (BOOL)isFuture
-{
-    return [self.date compare:[NSDate date]] == NSOrderedDescending;
-}
+//- (BOOL)isFuture
+//{
+//    return [self.date compare:[NSDate date]] == NSOrderedDescending;
+//}
 
 static NSArray *months;
 
@@ -341,6 +308,20 @@ static NSArray *months;
         months = [[[[NSDateFormatter alloc] init] shortStandaloneMonthSymbols] valueForKeyPath:@"capitalizedString"];
     }
     return [months objectAtIndex:(month - 1)];
+}
+
+static NSString* _textToday;
+
+- (NSString*) today
+{
+    if (!_textToday) {
+        NSDateFormatter *todayFormatter = [[NSDateFormatter alloc] init];
+        todayFormatter.dateStyle = NSDateFormatterMediumStyle;
+        todayFormatter.timeStyle = NSDateFormatterNoStyle;
+        todayFormatter.doesRelativeDateFormatting = YES;
+        _textToday = [todayFormatter stringFromDate:[NSDate date]];
+    }
+    return _textToday;
 }
 
 @end

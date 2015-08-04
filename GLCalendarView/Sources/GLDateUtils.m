@@ -79,7 +79,10 @@
 
 + (NSDate *)dateByAddingDays:(NSInteger )days toDate:(NSDate *)date {
     NSCalendar *calendar = [GLDateUtils calendar];
-    NSDateComponents *comps = [[NSDateComponents alloc] init];
+    static NSDateComponents *comps = nil;
+    if (!comps) {
+        comps = [[NSDateComponents alloc] init];
+    }
     [comps setDay:days];
     return [calendar dateByAddingComponents:comps toDate:date options:0];
 }
@@ -87,7 +90,10 @@
 + (NSDate *)dateByAddingMonths:(NSInteger )months toDate:(NSDate *)date
 {
     NSCalendar *calendar = [GLDateUtils calendar];
-    NSDateComponents *comps = [[NSDateComponents alloc] init];
+    static NSDateComponents *comps = nil;
+    if (!comps) {
+        comps = [[NSDateComponents alloc] init];
+    }
     [comps setMonth:months];
     return [calendar dateByAddingComponents:comps toDate:date options:0];
 }

@@ -87,6 +87,7 @@
     NSDate* endDate = beginDate;
     GLCalendarDateRange *range = [GLCalendarDateRange rangeWithBeginDate:beginDate endDate:endDate];
     range.backgroundColor = UIColorFromRGB(0x1368fe);
+    range.textColor = [UIColor whiteColor];
     range.editable = YES;
 
 
