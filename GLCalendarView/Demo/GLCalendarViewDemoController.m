@@ -42,36 +42,30 @@
 {
     [super viewWillAppear:YES];
     
-    NSDate *today = [NSDate date];
-
+//    NSDate *today = [NSDate date];
+//
 //    NSDate *beginDate1 = [GLDateUtils dateByAddingDays:-32 toDate:today];
 //    NSDate *endDate1 = [GLDateUtils dateByAddingDays:-26 toDate:today];
 //    GLCalendarDateRange *range1 = [GLCalendarDateRange rangeWithBeginDate:beginDate1 endDate:endDate1];
 //    range1.backgroundColor = UIColorFromRGB(0x79a9cd);
 //    range1.editable = YES;
 //    
-    NSDate *beginDate2 = [GLDateUtils dateByAddingDays:3 toDate:today];
-    NSDate *endDate2 = [GLDateUtils dateByAddingDays:4 toDate:today];
-    GLCalendarDateRange *range2 = [GLCalendarDateRange rangeWithBeginDate:beginDate2 endDate:endDate2];
-    range2.backgroundColor = UIColorFromRGB(0x79a9cd);
-    range2.editable = NO;
-//
-    self.calendarView.ranges = [@[range2] mutableCopy];
+//    NSDate *beginDate2 = [GLDateUtils dateByAddingDays:-60 toDate:today];
+//    NSDate *endDate2 = [GLDateUtils dateByAddingDays:-1 toDate:today];
+//    GLCalendarDateRange *range2 = [GLCalendarDateRange rangeWithBeginDate:beginDate2 endDate:endDate2];
+////    range2.backgroundColor =;
+//    range2.showMonthTitle = NO;
+//    range2.editable = NO;
+////
+//    self.calendarView.ranges = [@[range2] mutableCopy];
 //
 
 //    self.calendarView.firstDate = [GLDateUtils dateByAddingDays: -90 toDate:[NSDate date]];
 //    self.calendarView.lastDate  = [GLDateUtils dateByAddingDays: 300 toDate: self.calendarView.firstDate];
 
-    GLCalendarDateRange* restrictions = [GLCalendarDateRange rangeWithBeginDate:[GLDateUtils dateByAddingDays:3 toDate:[NSDate date]] endDate:[GLDateUtils dateByAddingDays: 183 toDate: [NSDate date]]];
+    GLCalendarDateRange* restrictions = [GLCalendarDateRange rangeWithBeginDate:[GLDateUtils dateByAddingDays:0 toDate:[NSDate date]] endDate:[GLDateUtils dateByAddingDays: 183 toDate: [NSDate date]]];
 
     self.calendarView.restrictSelectionWithRange = restrictions;
-
-//    [self.calendarView reload];
-
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [self.calendarView scrollToDate: restrictions.beginDate animated:NO];
-//    });
-//    [self.view layoutIfNeeded];
 }
 
 - (BOOL)calenderView:(GLCalendarView *)calendarView canAddRangeWithBeginDate:(NSDate *)beginDate
@@ -87,12 +81,17 @@
     NSDate* endDate = beginDate;
     GLCalendarDateRange *range = [GLCalendarDateRange rangeWithBeginDate:beginDate endDate:endDate];
     range.backgroundColor = UIColorFromRGB(0x1368fe);
-    range.textColor = [UIColor whiteColor];
+//    range.textColor = [UIColor whiteColor];
+    range.selectedMonthTitleAttributes = self.calendarView.selectedMonthTitleAttributes;
+    range.selectedDayTitleAttributes = self.calendarView.selectedDayTitleAttributes;
+    range.showMonthTitle = YES;
     range.editable = YES;
 
 
-    [self.calendarView.ranges enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        [self.calendarView removeRange:obj];
+    [self.calendarView.ranges enumerateObjectsUsingBlock:^(GLCalendarDateRange *obj, NSUInteger idx, BOOL *stop) {
+        if (obj.editable) {
+            [self.calendarView removeRange:obj];
+        }
     }];
 
     NSLog(@"Selected: %@", range);

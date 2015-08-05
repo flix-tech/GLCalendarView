@@ -39,11 +39,10 @@
 
 - (BOOL)containsDate:(NSDate *)date
 {
-    NSDate *d = [GLDateUtils cutDate:date];
-    if ([d compare:self.beginDate] == NSOrderedAscending) {
+    if ([date compare:self.beginDate] == NSOrderedAscending) {
         return NO;
     }
-    if ([d compare:self.endDate] == NSOrderedDescending) {
+    if ([date compare:self.endDate] == NSOrderedDescending) {
         return NO;
     }
     return YES;

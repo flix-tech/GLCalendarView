@@ -58,9 +58,14 @@
         self.dayLabel.numberOfLines = 2;
         [self.contentView addSubview: self.dayLabel];
 
-        self.lineLeft = [[UIView alloc] initWithFrame: CGRectMake(0, 0, lineWidth, width)];
-        self.lineBottom = [[UIView alloc] initWithFrame: CGRectMake(0, heigh, width, lineWidth)];
-        self.lineRight =  [[UIView alloc] initWithFrame: CGRectMake(width - lineWidth, 0, lineWidth, heigh)];
+        CGRect vertical = CGRectMake(0, 0, lineWidth, heigh);
+
+        self.lineLeft = [[UIView alloc] initWithFrame: vertical];
+
+        vertical.origin.x = width - lineWidth;
+        self.lineRight =  [[UIView alloc] initWithFrame: vertical];
+
+        self.lineBottom = [[UIView alloc] initWithFrame: CGRectMake(0, heigh - lineWidth, width, lineWidth)];
 
         [self.contentView addSubview: self.lineLeft];
         [self.contentView addSubview: self.lineRight];
@@ -75,25 +80,15 @@
         [self performUpdateUI];
         self.needsUIUpdate = NO;
     }
-
-    if (self.needsDayTextUpdate) {
-        [self updateDayLabelText:self.titleDate withTopLabel: self.titleTop];
-        self.needsDayTextUpdate = NO;
-    }
-
-    if (self.needsTodayTextUpdate) {
-        [self updateTodayLabelText:self.titleDate withTopLabel: self.titleTop];
-        self.needsTodayTextUpdate = NO;
-    }
-
     [super layoutSubviews];
 }
 
-- (void)setDate:(GLCalendarDate *)date range:(GLCalendarDateRange *)range cellPosition:(CELL_POSITION)cellPosition enlargePoint:(ENLARGE_POINT)enlargePoint disabled: (BOOL) disabled
+- (void)setDate:(GLCalendarDate *)date range:(GLCalendarDateRange *)range cellPosition:(CELL_POSITION)cellPosition enlargePoint:(ENLARGE_POINT)enlargePoint disabled: (BOOL) disabled isToday: (BOOL) isToday
 {
-    _date = [date copy];
+    _date = date;
     _range = range;
     _disabled = disabled;
+    _isToday = isToday;
     if (range) {
         self.inEdit = range.inEdit;
     } else {
@@ -112,16 +107,13 @@
 }
 - (void)performUpdateUI
 {
-//    NSLog(@"update ui: %@ %d", [GLDateUtils descriptionForDate:self.date], _enlargePoint);
-
-//    NSDateComponents *components = [[GLDateUtils calendar] components:NSCalendarUnitDay|NSCalendarUnitMonth fromDate:self.date];
-//    
     NSInteger day = self.date.day;
     NSInteger month = self.date.month;
-//    NSInteger monthDays = [[GLDateUtils calendar] rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:self.date].length;
 
     // month background color
-    if (month % 2 == 0) {
+    if (self.range.backgroundColor) {
+        self.dayLabel.backgroundColor = self.range.backgroundColor;
+    } else if (month % 2 == 0) {
         self.dayLabel.backgroundColor = self.evenMonthBackgroundColor;
     } else {
         self.dayLabel.backgroundColor = self.oddMonthBackgroundColor;
@@ -148,158 +140,46 @@
     }
         
     // day label and month label
+    NSString* dayTitle = [NSString stringWithFormat:@"%ld", (long)day];
     if ([self isToday]) {
-        [self setTodayLabelText:[NSString stringWithFormat:@"%ld", (long)day] withTopLabel:[self today]];
-        if (self.todayBackgroundColor) {
+        [self setDayLabelText:dayTitle withTopLabel: [self today]];
+        if (self.todayBackgroundColor && !self.range.backgroundColor) {
             self.dayLabel.backgroundColor = self.todayBackgroundColor;
-        } else {
-            self.dayLabel.backgroundColor = [UIColor whiteColor];
         }
-    } else if(day == 1) {
-        [self setDayLabelText:[NSString stringWithFormat:@"%ld", (long)day] withTopLabel: [self monthText:month]];
-    } else if (  self.range && self.range.durationDays < 1 ) {
-
+    } else if(day == 1 || self.range.showMonthTitle) {
+        [self setDayLabelText: dayTitle withTopLabel: [self monthText:month]];
     } else {
-        [self setDayLabelText:[NSString stringWithFormat:@"%ld", (long)day] withTopLabel: nil];
+        [self setDayLabelText:dayTitle withTopLabel: nil];
     }
     
-    // background cover
-    if (self.range) {
-        // configure look when in range
-        self.dayLabel.backgroundColor = self.range.backgroundColor ?: [UIColor whiteColor];
-    }
 }
 
 - (void)setDayLabelText:(NSString *)text withTopLabel: (NSString*) top
 {
-    self.titleTop = top;
-    self.titleDate = text;
+    NSDictionary* attributes = self.dayLabelAttributes;
+    NSDictionary* topAttributes = self.monthLabelAttributes;
 
-    self.needsTodayTextUpdate = NO;
-    self.needsDayTextUpdate = YES;
-
-    [self setNeedsLayout];
-}
-
-- (void)updateDayLabelText:(NSString *)text withTopLabel: (NSString*) top
-{
-
-//    if (text) {
-//        NSString* title = text;
-//        if (top) {
-//            title = [title stringByAppendingFormat:@"\n%@",top];
-//        }
-//        self.dayLabel.text = title;
-//        return;
-//    } else {
-//        return;
-//    }
-
-    UIColor* textColor = self.range.textColor;
-
-    NSDictionary* attributes = self.disabled ? self.dayDisabledLabelAttributes : self.dayLabelAttributes;
-
-    if (textColor) {
-        attributes = @{
-                       NSFontAttributeName: attributes[NSFontAttributeName],
-                       NSForegroundColorAttributeName: textColor
-                       };
+    if (self.disabled) {
+        attributes = self.dayDisabledLabelAttributes;
+    } else if(self.range) {
+        attributes = self.range.selectedDayTitleAttributes;
+        topAttributes = self.range.selectedMonthTitleAttributes;
+    } else if([self isToday]){
+        attributes = self.todayLabelAttributes;
+        topAttributes = self.todayTitleAttributes;
     }
 
-    NSAttributedString* dayString = [[NSAttributedString alloc] initWithString:text attributes: attributes];
 
-    NSAttributedString* topString;
+    NSMutableAttributedString* dayString = [[NSMutableAttributedString alloc] initWithString:text attributes: attributes];
 
     if (top) {
         NSString* topNewLine = [top stringByAppendingString:@"\n"];
-
-        NSDictionary* topAttributes = self.monthLabelAttributes;
-
-        if (textColor) {
-            topAttributes = @{
-                              NSFontAttributeName: topAttributes[NSFontAttributeName],
-                              NSForegroundColorAttributeName: textColor
-                              };
-        }
-
-        topString = [[NSAttributedString alloc] initWithString:topNewLine attributes:topAttributes];
+        NSAttributedString *topString = [[NSAttributedString alloc] initWithString:topNewLine attributes:topAttributes];
+        [dayString insertAttributedString:topString atIndex: 0];
     }
 
-    NSMutableAttributedString* res = [[NSMutableAttributedString alloc] init];
-
-    if (topString) {
-        [res appendAttributedString: topString];
-    }
-
-    [res appendAttributedString: dayString];
-
-    self.dayLabel.attributedText = res;
+    self.dayLabel.attributedText = dayString;
 }
-
-
-//- (void)setFutureDayLabelText:(NSString *)text
-//{
-//    self.dayLabel.attributedText = [[NSAttributedString alloc] initWithString:text attributes:self.futureDayLabelAttributes];
-//}
-
-
-- (void)setTodayLabelText:(NSString *)text
-{
-//    self.dayLabel.attributedText = [[NSAttributedString alloc] initWithString:text attributes:self.todayLabelAttributes];
-    [self setTodayLabelText: text withTopLabel: nil];
-}
-
-- (void)setTodayLabelText:(NSString *)text withTopLabel: (NSString*) top
-{
-    self.titleTop = top;
-    self.titleDate = text;
-
-    self.needsTodayTextUpdate = YES;
-    self.needsDayTextUpdate = NO;
-
-    [self setNeedsLayout];
-}
-
-
-- (void)updateTodayLabelText:(NSString *)text withTopLabel: (NSString*) top
-{
-    NSString* topNewLine = [top stringByAppendingString:@"\n"];
-
-    UIColor* todayTextColor = self.todayLabelAttributes[NSForegroundColorAttributeName];
-
-    if (self.disabled) {
-        todayTextColor = self.dayDisabledLabelAttributes[NSForegroundColorAttributeName];
-    }
-
-    NSDictionary *todayTopLabelAttributes = @{
-                                              NSFontAttributeName: self.monthLabelAttributes[NSFontAttributeName],
-                                              NSForegroundColorAttributeName: self.todayLabelAttributes[NSForegroundColorAttributeName]
-                                              };
-
-    NSDictionary* todayDayLabelAttributes = @{
-                                              NSFontAttributeName: self.todayLabelAttributes[NSFontAttributeName],
-                                              NSForegroundColorAttributeName: todayTextColor
-                                              };
-
-    NSAttributedString* topString = [[NSAttributedString alloc] initWithString:topNewLine attributes:todayTopLabelAttributes];
-    NSAttributedString* dayString = [[NSAttributedString alloc] initWithString:text attributes:todayDayLabelAttributes];
-
-    NSMutableAttributedString* res = [[NSMutableAttributedString alloc] initWithAttributedString: topString];
-
-    [res appendAttributedString: dayString];
-
-    self.dayLabel.attributedText = res;
-}
-
-- (BOOL)isToday
-{
-    return [self.date isTheSameDayAsDate:[NSDate date]];
-}
-
-//- (BOOL)isFuture
-//{
-//    return [self.date compare:[NSDate date]] == NSOrderedDescending;
-//}
 
 static NSArray *months;
 
@@ -319,7 +199,7 @@ static NSString* _textToday;
         todayFormatter.dateStyle = NSDateFormatterMediumStyle;
         todayFormatter.timeStyle = NSDateFormatterNoStyle;
         todayFormatter.doesRelativeDateFormatting = YES;
-        _textToday = [todayFormatter stringFromDate:[NSDate date]];
+        _textToday = [todayFormatter stringFromDate:self.date.date];
     }
     return _textToday;
 }

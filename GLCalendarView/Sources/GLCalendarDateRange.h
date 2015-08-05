@@ -12,13 +12,15 @@
 
 @interface GLCalendarDateRange : NSObject
 @property (nonatomic, copy) NSDate *beginDate;
-@property (nonatomic, copy) NSDate *endDate;;
+@property (nonatomic, copy) NSDate *endDate;
 @property (nonatomic) BOOL inEdit;
 @property (nonatomic) BOOL editable;
+@property (nonatomic) BOOL showMonthTitle;
 
 @property (nonatomic, strong) UIImage *backgroundImage;
 @property (nonatomic, strong) UIColor *backgroundColor;
-@property (nonatomic, strong) UIColor *textColor;
+@property (nonatomic, strong) NSDictionary *selectedDayTitleAttributes;
+@property (nonatomic, strong) NSDictionary *selectedMonthTitleAttributes;
 @property (nonatomic, weak) id binding; // you can bind your model here
 + (instancetype)rangeWithBeginDate:(NSDate *)beginDate endDate:(NSDate *)endDate;
 - (BOOL)containsDate:(NSDate *)date;

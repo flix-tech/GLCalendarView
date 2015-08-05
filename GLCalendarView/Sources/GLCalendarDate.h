@@ -18,7 +18,8 @@
 @property (nonatomic, readonly) NSInteger year;
 @property (nonatomic, readonly) NSInteger monthDays;
 
-- (instancetype) initWithDate: (NSDate*) date NS_DESIGNATED_INITIALIZER;
+- (instancetype) initWithDate: (NSDate*) date;
+- (instancetype) initWithCutDate: (NSDate*) date NS_DESIGNATED_INITIALIZER;
 - (BOOL) isTheSameDayAs: (GLCalendarDate*) otherDate;
 - (BOOL) isTheSameDayAsDate: (NSDate*) otherDate;
 @end

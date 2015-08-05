@@ -10,7 +10,8 @@
 #import "GLDateUtils.h"
 
 @implementation GLCalendarDate
-- (instancetype)initWithDate:(NSDate *)date
+
+- (instancetype)initWithCutDate:(NSDate *)date
 {
     self = [super init];
 
@@ -23,33 +24,56 @@
     }
 
     _date = date;
-    _cutDate = [GLDateUtils cutDate: date];
+    _cutDate = date;
 
-    NSDateComponents *components = [[GLDateUtils calendar] components:NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear fromDate:date];
+    NSCalendar* calendar = [GLDateUtils calendar];
+
+    NSDateComponents *components = [calendar components:NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear fromDate:date];
 
     _day = components.day;
     _month = components.month;
     _year = components.year;
-    
-    _monthDays = [[GLDateUtils calendar] rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:date].length;
 
+
+    // this code will run faster on Gregorian Calendar. Yes, that's it.
+    if([calendar.calendarIdentifier isEqualToString: NSCalendarIdentifierGregorian]) {
+        static int daysInMonth[] = {0,31,28,31,30,31,30,31,31,30,31,30,31};
+
+        _monthDays = daysInMonth[_month];
+        if (_month == 2 && (_year - 2000) % 4 == 0) { // leap year
+            _monthDays = 29;
+        }
+    } else {
+        _monthDays = [[GLDateUtils calendar] rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:date].length;
+    }
+    
     return self;
 }
 
+- (instancetype)initWithDate:(NSDate *)date
+{
+    self = [self initWithCutDate: date];
+    if (self) {
+        _cutDate = [GLDateUtils cutDate: date];
+    }
+    return self;
+}
+
+
 - (BOOL) isTheSameDayAs: (GLCalendarDate*) otherDate
 {
-    return (_day == [otherDate day] &&
-            _month == [otherDate month] &&
-            _year == [otherDate year]);
+    return (_day == otherDate->_day &&
+            _month == otherDate->_month &&
+            _year == otherDate->_year);
 }
 
 - (BOOL) isTheSameDayAsDate: (NSDate*) otherDate
 {
     NSDateComponents *components = [[GLDateUtils calendar] components:NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear fromDate: otherDate];
 
-    return (_day == [components day] &&
+    return (_day   == [components day]   &&
             _month == [components month] &&
-            _year == [components year]);
+            _year  == [components year]);
 }
 
 #pragma mark - copy

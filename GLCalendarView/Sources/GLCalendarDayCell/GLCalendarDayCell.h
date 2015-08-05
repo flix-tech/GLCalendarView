@@ -33,9 +33,11 @@ typedef NS_ENUM(NSInteger, RANGE_DISPLAY_MODE) {
 @property (nonatomic, strong) UIColor *gridNormalColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIColor *gridSeparatorColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) NSDictionary *dayLabelAttributes UI_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) NSDictionary *futureDayLabelAttributes UI_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) NSDictionary *todayLabelAttributes UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) NSDictionary *monthLabelAttributes UI_APPEARANCE_SELECTOR;
+
+@property (nonatomic, strong) NSDictionary *todayLabelAttributes UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) NSDictionary *todayTitleAttributes UI_APPEARANCE_SELECTOR;
+
 @property (nonatomic, strong) NSDictionary *dayDisabledLabelAttributes UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIColor *todayBackgroundColor UI_APPEARANCE_SELECTOR;
 
@@ -46,9 +48,10 @@ typedef NS_ENUM(NSInteger, RANGE_DISPLAY_MODE) {
 @property (nonatomic) CGFloat editCoverPointScale UI_APPEARANCE_SELECTOR;
 @property (nonatomic) RANGE_DISPLAY_MODE rangeDisplayMode UI_APPEARANCE_SELECTOR;
 
-@property (nonatomic, readonly) GLCalendarDate *date;
+@property (nonatomic, strong, readonly) GLCalendarDate *date;
 @property (nonatomic, weak, readonly) GLCalendarDateRange *range;
 @property (nonatomic, readonly) BOOL disabled;
+@property (nonatomic, readonly) BOOL isToday;
 
-- (void)setDate:(GLCalendarDate *)date range:(GLCalendarDateRange *)range cellPosition:(CELL_POSITION)cellPosition enlargePoint:(ENLARGE_POINT)enlargePoint disabled: (BOOL) disabled;
+- (void)setDate:(GLCalendarDate *)date range:(GLCalendarDateRange *)range cellPosition:(CELL_POSITION)cellPosition enlargePoint:(ENLARGE_POINT)enlargePoint disabled: (BOOL) disabled isToday: (BOOL) isToday;
 @end

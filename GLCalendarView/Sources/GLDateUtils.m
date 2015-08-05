@@ -28,14 +28,24 @@
 }
 
 + (NSCalendar *)calendar {
-    NSMutableDictionary *threadDictionary = [[NSThread currentThread] threadDictionary];
-    NSCalendar *cal = [threadDictionary objectForKey:@"GLCalendar"];
-    if (!cal) {
-        cal = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-        cal.locale = [NSLocale currentLocale];
-        [threadDictionary setObject:cal forKey:@"GLCalendar"];
-    }
-    return cal;
+    static dispatch_once_t onceToken;
+    static NSCalendar* calendar;
+    dispatch_once(&onceToken, ^{
+        calendar = [NSCalendar currentCalendar];
+        if (![calendar.calendarIdentifier isEqualToString: NSCalendarIdentifierGregorian]) {
+            calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+            calendar.locale = [NSLocale currentLocale];
+        }
+    });
+    return calendar;
+//    NSMutableDictionary *threadDictionary = [[NSThread currentThread] threadDictionary];
+//    NSCalendar *cal = [threadDictionary objectForKey:@"GLCalendar"];
+//    if (!cal) {
+//        cal = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+//        cal.locale = [NSLocale currentLocale];
+//        [threadDictionary setObject:cal forKey:@"GLCalendar"];
+//    }
+//    return cal;
 }
 
 + (NSDate *)weekFirstDate:(NSDate *)date

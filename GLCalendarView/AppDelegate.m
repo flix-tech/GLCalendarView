@@ -48,7 +48,9 @@
 
     [GLCalendarDayCell appearance].dayLabelAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:UIColorFromRGB(0x555555)};
 
-    [GLCalendarDayCell appearance].todayLabelAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:[UIColor whiteColor]};
+    [GLCalendarDayCell appearance].todayLabelAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:[UIColor grayColor]};
+
+    [GLCalendarDayCell appearance].todayTitleAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:12], NSForegroundColorAttributeName:[UIColor grayColor]};
 
     [GLCalendarDayCell appearance].dayDisabledLabelAttributes = @{
                                                                   NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:UIColorFromRGB(0xEEEEEE)
@@ -64,6 +66,17 @@
     [GLCalendarDayCell appearance].gridSeparatorColor = [UIColor lightGrayColor];
     
 //    [GLCalendarDayCell appearance].todayBackgroundColor = nil;
+
+    [GLCalendarView appearance].selectedDayTitleAttributes = @{
+                                                               NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:UIColorFromRGB(0xFFFFFF)
+
+                                                               };
+    [GLCalendarView appearance].selectedMonthTitleAttributes = @{
+                                                               NSFontAttributeName:[UIFont boldSystemFontOfSize:12], NSForegroundColorAttributeName:UIColorFromRGB(0xFFFFFF)
+
+                                                               };
+
+;
 
     return YES;
 }

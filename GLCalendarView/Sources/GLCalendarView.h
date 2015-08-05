@@ -29,9 +29,13 @@
 @property (nonatomic, strong) NSDictionary *weekDayTitleAttributes UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) NSDictionary *monthCoverAttributes UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) NSDictionary *monthCoverYearAttributes UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) NSDictionary *selectedDayTitleAttributes UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) NSDictionary *selectedMonthTitleAttributes UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIImage *backToTodayButtonImage UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIColor *backToTodayButtonColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIColor *backToTodayButtonBorderColor UI_APPEARANCE_SELECTOR;
+
+@property (weak, nonatomic, readonly) UIView *weekDayTitle;
 
 @property (nonatomic, readonly) NSCalendar *calendar;
 @property (nonatomic, copy) NSDate *firstDate;
