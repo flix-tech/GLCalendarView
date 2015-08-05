@@ -13,16 +13,22 @@
 @interface GLCalendarMonthCoverView()
 @property (nonatomic, strong) GLCalendarDate *firstDate;
 @property (nonatomic, strong) GLCalendarDate *lastDate;
+@property (nonatomic, strong) NSDateFormatter* monthFormatter;
 @end
 
 @implementation GLCalendarMonthCoverView
 
+- (NSDateFormatter*) monthFormatter
+{
+    if (!_monthFormatter) {
+        _monthFormatter = [[NSDateFormatter alloc] init];
+        _monthFormatter.dateFormat = @"MMMM";
+    }
+    return _monthFormatter;
+}
+
 - (void)updateWithFirstDate:(NSDate *)firstDate lastDate:(NSDate *)lastDate calendar:(NSCalendar *)calendar rowHeight:(CGFloat)rowHeight
 {
-//    if ([GLDateUtils date:firstDate isSameDayAsDate:self.firstDate] && [GLDateUtils date:lastDate isSameDayAsDate:self.lastDate]) {
-//        return;
-//    }
-
     if ([self.firstDate isTheSameDayAsDate:firstDate] &&
         [self.lastDate isTheSameDayAsDate:lastDate]) {
         return;
@@ -33,11 +39,6 @@
     self.lastDate = [[GLCalendarDate alloc] initWithDate:lastDate];
     
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    
-    NSDateFormatter *monthFormatter = [[NSDateFormatter alloc] init];
-    monthFormatter.dateFormat = @"MMMM";
-    NSDateFormatter *yearFormatter = [[NSDateFormatter alloc] init];
-    yearFormatter.dateFormat = @"YYYY";
 
     NSDateComponents *today = [calendar components:NSCalendarUnitYear fromDate:[NSDate date]];
     
@@ -51,11 +52,9 @@
 
         UILabel *monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.bounds), rowHeight * 3)];
         monthLabel.backgroundColor = [UIColor clearColor];
-        monthLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        monthLabel.numberOfLines = 0;
         monthLabel.textAlignment = NSTextAlignmentCenter;
 
-        NSString *labelText = [monthFormatter stringFromDate:date];
+        NSString *labelText = [self.monthFormatter stringFromDate:date];
 
         NSAttributedString* labelTextAttributed = [[NSAttributedString alloc] initWithString:labelText attributes:self.textMonthAttributes];
         if (today.year != components.year) {
@@ -64,7 +63,9 @@
 
             [labelWithYear appendAttributedString: labelTextAttributed];
 
-            NSAttributedString* labelYear = [[NSAttributedString alloc] initWithString:[yearFormatter stringFromDate: date] attributes: self.textYearAttributes];
+            NSString* textYear = [NSString stringWithFormat: @"%ld",(long)components.year];
+
+            NSAttributedString* labelYear = [[NSAttributedString alloc] initWithString:textYear attributes: self.textYearAttributes];
 
             [labelWithYear appendAttributedString: labelYear];
 

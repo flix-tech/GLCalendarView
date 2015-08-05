@@ -640,7 +640,7 @@ static NSDate *today;
         [indexPaths addObject:[NSIndexPath indexPathForItem:i inSection:0]];
     }
     // prevent crash: too many update animations on one view - limit is 31 in flight at a time
-    if (indexPaths.count > 30) {
+    if (indexPaths.count > 1) {
         [self.collectionView reloadData];
     } else {
         [UIView performWithoutAnimation:^{
