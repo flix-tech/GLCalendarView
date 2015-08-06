@@ -55,9 +55,6 @@ enum RANGE_DISPLAY_MODE;
 @property (nonatomic, strong) UIColor *cellEditCoverBorderColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic) CGFloat cellEditCoverPointSize UI_APPEARANCE_SELECTOR;
 @property (nonatomic) CGFloat cellEditCoverPointScale UI_APPEARANCE_SELECTOR;
-//@property (nonatomic) RANGE_DISPLAY_MODE cellRangeDisplayMode UI_APPEARANCE_SELECTOR;
-
-
 
 @property (weak, nonatomic, readonly) UIView *weekDayTitle;
 
