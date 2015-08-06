@@ -36,6 +36,8 @@
     // Do any additional setup after loading the view, typically from a nib.
     self.calendarView.delegate = self;
     self.calendarView.showMaginfier = NO;
+
+    [self setupCellsAppearance];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -81,7 +83,6 @@
     NSDate* endDate = beginDate;
     GLCalendarDateRange *range = [GLCalendarDateRange rangeWithBeginDate:beginDate endDate:endDate];
     range.backgroundColor = UIColorFromRGB(0x1368fe);
-//    range.textColor = [UIColor whiteColor];
     range.selectedMonthTitleAttributes = self.calendarView.selectedMonthTitleAttributes;
     range.selectedDayTitleAttributes = self.calendarView.selectedDayTitleAttributes;
     range.showMonthTitle = YES;
@@ -130,10 +131,41 @@
 
 - (IBAction)deleteButtonPressed:(id)sender
 {
-//    if (self.rangeUnderEdit) {
-//        [self.calendarView removeRange:self.rangeUnderEdit];
-//    }
-    [self.calendarView scrollToDate:[NSDate date] animated:YES];
+    if (self.rangeUnderEdit) {
+        [self.calendarView removeRange:self.rangeUnderEdit];
+    }
+//    [self.calendarView scrollToDate:[NSDate date] animated:YES];
+}
+
+#pragma mark - cell appearance moved to properties
+
+- (void) setupCellsAppearance
+{
+    GLCalendarView* calendarView = self.calendarView;
+
+    calendarView.cellEvenMonthBackgroundColor = [UIColor whiteColor];
+    calendarView.cellOddMonthBackgroundColor = [UIColor whiteColor];
+
+    calendarView.cellEditCoverPadding = 0;
+
+    calendarView.cellDayLabelAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:UIColorFromRGB(0x555555)};
+
+    calendarView.cellTodayLabelAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:[UIColor grayColor]};
+
+    calendarView.cellTodayTitleAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:12], NSForegroundColorAttributeName:[UIColor grayColor]};
+
+    calendarView.cellDayDisabledLabelAttributes = @{
+                                                                   NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:UIColorFromRGB(0xEEEEEE)
+                                                                   };
+    calendarView.cellMonthLabelAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:12],
+                                                             NSForegroundColorAttributeName:[UIColor grayColor]};
+
+    calendarView.cellEditCoverBorderWidth = 0;
+    calendarView.cellEditCoverBorderColor = UIColorFromRGB(0x366aac);
+    calendarView.cellEditCoverPointSize = 14;
+
+    calendarView.cellGridNormalColor    = [[UIColor lightGrayColor] colorWithAlphaComponent:0.3];
+    calendarView.cellGridSeparatorColor = [UIColor lightGrayColor];
 }
 
 @end

@@ -25,8 +25,8 @@ enum RANGE_DISPLAY_MODE;
 
 
 @interface GLCalendarView : UIView
-@property (nonatomic) CGFloat padding UI_APPEARANCE_SELECTOR;
-@property (nonatomic) CGFloat rowHeight UI_APPEARANCE_SELECTOR;
+@property (nonatomic) CGFloat padding;
+@property (nonatomic) CGFloat rowHeight;
 @property (nonatomic, strong) NSDictionary *weekDayTitleAttributes UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) NSDictionary *monthCoverAttributes UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) NSDictionary *monthCoverYearAttributes UI_APPEARANCE_SELECTOR;
@@ -37,24 +37,24 @@ enum RANGE_DISPLAY_MODE;
 @property (nonatomic, strong) UIColor *backToTodayButtonBorderColor UI_APPEARANCE_SELECTOR;
 
 //cell appearance
-@property (nonatomic, strong) UIColor *cellEvenMonthBackgroundColor UI_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) UIColor *cellOddMonthBackgroundColor UI_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) UIColor *cellGridNormalColor UI_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) UIColor *cellGridSeparatorColor UI_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) NSDictionary *cellDayLabelAttributes UI_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) NSDictionary *cellMonthLabelAttributes UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *cellEvenMonthBackgroundColor;
+@property (nonatomic, strong) UIColor *cellOddMonthBackgroundColor;
+@property (nonatomic, strong) UIColor *cellGridNormalColor;
+@property (nonatomic, strong) UIColor *cellGridSeparatorColor;
+@property (nonatomic, strong) NSDictionary *cellDayLabelAttributes;
+@property (nonatomic, strong) NSDictionary *cellMonthLabelAttributes;
 
-@property (nonatomic, strong) NSDictionary *cellTodayLabelAttributes UI_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) NSDictionary *cellTodayTitleAttributes UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) NSDictionary *cellTodayLabelAttributes;
+@property (nonatomic, strong) NSDictionary *cellTodayTitleAttributes;
 
-@property (nonatomic, strong) NSDictionary *cellDayDisabledLabelAttributes UI_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) UIColor *cellTodayBackgroundColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) NSDictionary *cellDayDisabledLabelAttributes;
+@property (nonatomic, strong) UIColor *cellTodayBackgroundColor;
 
-@property (nonatomic) CGFloat cellEditCoverPadding UI_APPEARANCE_SELECTOR;
-@property (nonatomic) CGFloat cellEditCoverBorderWidth UI_APPEARANCE_SELECTOR;
-@property (nonatomic, strong) UIColor *cellEditCoverBorderColor UI_APPEARANCE_SELECTOR;
-@property (nonatomic) CGFloat cellEditCoverPointSize UI_APPEARANCE_SELECTOR;
-@property (nonatomic) CGFloat cellEditCoverPointScale UI_APPEARANCE_SELECTOR;
+@property (nonatomic) CGFloat cellEditCoverPadding;
+@property (nonatomic) CGFloat cellEditCoverBorderWidth;
+@property (nonatomic, strong) UIColor *cellEditCoverBorderColor;
+@property (nonatomic) CGFloat cellEditCoverPointSize;
+@property (nonatomic) CGFloat cellEditCoverPointScale;
 
 @property (weak, nonatomic, readonly) UIView *weekDayTitle;
 

@@ -604,10 +604,6 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
 - (void) configureCellAppearance: (GLCalendarDayCell*) cell
 {
-    if (cell.appearanceConfigured) {
-        return;
-    }
-    
     cell.evenMonthBackgroundColor = self.cellEvenMonthBackgroundColor;
     cell.oddMonthBackgroundColor = self.cellOddMonthBackgroundColor;
     cell.gridNormalColor = self.cellGridNormalColor;
@@ -623,8 +619,6 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     cell.editCoverBorderColor = self.cellEditCoverBorderColor;
     cell.editCoverPointScale = self.cellEditCoverPointScale;
     cell.editCoverPointSize = self.cellEditCoverPointSize;
-
-    cell.appearanceConfigured = YES;
 }
 
 # pragma mark - helper
