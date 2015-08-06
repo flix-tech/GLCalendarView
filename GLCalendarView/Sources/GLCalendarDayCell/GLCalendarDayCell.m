@@ -20,11 +20,6 @@
 
 @interface GLCalendarDayCell()
 @property (strong, nonatomic) IBOutlet UILabel *dayLabel;
-//@property (weak, nonatomic) IBOutlet UILabel *monthLabel;
-//@property (weak, nonatomic) IBOutlet UIView *backgroundView;
-//@property (weak, nonatomic) IBOutlet NSLayoutConstraint *backgroundCoverLeft;
-//@property (weak, nonatomic) IBOutlet NSLayoutConstraint *backgroundCoverRight;
-
 @property (nonatomic) CELL_POSITION position;
 @property (nonatomic) ENLARGE_POINT enlargePoint;
 @property (nonatomic) BOOL inEdit;

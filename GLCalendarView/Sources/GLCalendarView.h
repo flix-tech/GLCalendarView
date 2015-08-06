@@ -10,6 +10,7 @@
 #import "GLCalendarDateRange.h"
 
 @class GLCalendarView;
+enum RANGE_DISPLAY_MODE;
 
 @protocol GLCalendarViewDelegate <NSObject>
 - (BOOL)calenderView:(GLCalendarView *)calendarView canAddRangeWithBeginDate:(NSDate *)beginDate;
@@ -34,6 +35,29 @@
 @property (nonatomic, strong) UIImage *backToTodayButtonImage UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIColor *backToTodayButtonColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIColor *backToTodayButtonBorderColor UI_APPEARANCE_SELECTOR;
+
+//cell appearance
+@property (nonatomic, strong) UIColor *cellEvenMonthBackgroundColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *cellOddMonthBackgroundColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *cellGridNormalColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *cellGridSeparatorColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) NSDictionary *cellDayLabelAttributes UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) NSDictionary *cellMonthLabelAttributes UI_APPEARANCE_SELECTOR;
+
+@property (nonatomic, strong) NSDictionary *cellTodayLabelAttributes UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) NSDictionary *cellTodayTitleAttributes UI_APPEARANCE_SELECTOR;
+
+@property (nonatomic, strong) NSDictionary *cellDayDisabledLabelAttributes UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *cellTodayBackgroundColor UI_APPEARANCE_SELECTOR;
+
+@property (nonatomic) CGFloat cellEditCoverPadding UI_APPEARANCE_SELECTOR;
+@property (nonatomic) CGFloat cellEditCoverBorderWidth UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *cellEditCoverBorderColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic) CGFloat cellEditCoverPointSize UI_APPEARANCE_SELECTOR;
+@property (nonatomic) CGFloat cellEditCoverPointScale UI_APPEARANCE_SELECTOR;
+//@property (nonatomic) RANGE_DISPLAY_MODE cellRangeDisplayMode UI_APPEARANCE_SELECTOR;
+
+
 
 @property (weak, nonatomic, readonly) UIView *weekDayTitle;
 

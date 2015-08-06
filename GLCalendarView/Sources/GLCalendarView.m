@@ -277,7 +277,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 {
     GLCalendarDayCell *cell = (GLCalendarDayCell *)[collectionView dequeueReusableCellWithReuseIdentifier:CELL_REUSE_IDENTIFIER forIndexPath:indexPath];
 
-//    return cell;
+    [self configureCellAppearance: cell];
 
     CELL_POSITION cellPosition;
     ENLARGE_POINT enlargePoint;
@@ -413,7 +413,6 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     if (!decelerate) {
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
             self.monthCoverView.alpha = 0.1;
-            //        self.collectionView.alpha = 1;
         } completion:^(BOOL finished) {
             self.monthCoverView.hidden = YES;
         }];
@@ -600,6 +599,34 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 {
     [self scrollToDate:self.today.date animated:YES];
 }
+
+# pragma mark - cell styling
+
+- (void) configureCellAppearance: (GLCalendarDayCell*) cell
+{
+    if (cell.appearanceConfigured) {
+        return;
+    }
+    
+    cell.evenMonthBackgroundColor = self.cellEvenMonthBackgroundColor;
+    cell.oddMonthBackgroundColor = self.cellOddMonthBackgroundColor;
+    cell.gridNormalColor = self.cellGridNormalColor;
+    cell.gridSeparatorColor = self.cellGridSeparatorColor;
+    cell.dayLabelAttributes = self.cellDayLabelAttributes;
+    cell.monthLabelAttributes = self.cellMonthLabelAttributes;
+    cell.todayLabelAttributes = self.cellTodayLabelAttributes;
+    cell.todayTitleAttributes = self.cellTodayTitleAttributes;
+    cell.dayDisabledLabelAttributes = self.cellDayDisabledLabelAttributes;
+    cell.todayBackgroundColor = self.cellTodayBackgroundColor;
+    cell.editCoverPadding = self.cellEditCoverPadding;
+    cell.editCoverBorderWidth = self.cellEditCoverBorderWidth;
+    cell.editCoverBorderColor = self.cellEditCoverBorderColor;
+    cell.editCoverPointScale = self.cellEditCoverPointScale;
+    cell.editCoverPointSize = self.cellEditCoverPointSize;
+
+    cell.appearanceConfigured = YES;
+}
+
 # pragma mark - helper
 
 static NSDate *today;

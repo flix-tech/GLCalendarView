@@ -39,31 +39,31 @@
     [GLCalendarView appearance].monthCoverYearAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:24],
                                                          NSForegroundColorAttributeName:[UIColor grayColor]};
 
-    [GLCalendarDayCell appearance].evenMonthBackgroundColor = [UIColor whiteColor];
-    [GLCalendarDayCell appearance].oddMonthBackgroundColor = [UIColor whiteColor];
+    [GLCalendarView appearance].cellEvenMonthBackgroundColor = [UIColor whiteColor];
+    [GLCalendarView appearance].cellOddMonthBackgroundColor = [UIColor whiteColor];
 
-    [GLCalendarDayCell appearance].editCoverPadding = 0;
+    [GLCalendarView appearance].cellEditCoverPadding = 0;
 
-    [GLCalendarDayCell appearance].rangeDisplayMode = RANGE_DISPLAY_MODE_SINGLE;
+//    [GLCalendarView appearance].rangeDisplayMode = RANGE_DISPLAY_MODE_SINGLE;
 
-    [GLCalendarDayCell appearance].dayLabelAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:UIColorFromRGB(0x555555)};
+    [GLCalendarView appearance].cellDayLabelAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:UIColorFromRGB(0x555555)};
 
-    [GLCalendarDayCell appearance].todayLabelAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:[UIColor grayColor]};
+    [GLCalendarView appearance].cellTodayLabelAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:[UIColor grayColor]};
 
-    [GLCalendarDayCell appearance].todayTitleAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:12], NSForegroundColorAttributeName:[UIColor grayColor]};
+    [GLCalendarView appearance].cellTodayTitleAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:12], NSForegroundColorAttributeName:[UIColor grayColor]};
 
-    [GLCalendarDayCell appearance].dayDisabledLabelAttributes = @{
+    [GLCalendarView appearance].cellDayDisabledLabelAttributes = @{
                                                                   NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:UIColorFromRGB(0xEEEEEE)
                                                                   };
-    [GLCalendarDayCell appearance].monthLabelAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:12],
+    [GLCalendarView appearance].cellMonthLabelAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:12],
                                                             NSForegroundColorAttributeName:[UIColor grayColor]};
     
-    [GLCalendarDayCell appearance].editCoverBorderWidth = 0;
-    [GLCalendarDayCell appearance].editCoverBorderColor = UIColorFromRGB(0x366aac);
-    [GLCalendarDayCell appearance].editCoverPointSize = 14;
+    [GLCalendarView appearance].cellEditCoverBorderWidth = 0;
+    [GLCalendarView appearance].cellEditCoverBorderColor = UIColorFromRGB(0x366aac);
+    [GLCalendarView appearance].cellEditCoverPointSize = 14;
 
-    [GLCalendarDayCell appearance].gridNormalColor    = [[UIColor lightGrayColor] colorWithAlphaComponent:0.3];
-    [GLCalendarDayCell appearance].gridSeparatorColor = [UIColor lightGrayColor];
+    [GLCalendarView appearance].cellGridNormalColor    = [[UIColor lightGrayColor] colorWithAlphaComponent:0.3];
+    [GLCalendarView appearance].cellGridSeparatorColor = [UIColor lightGrayColor];
     
 //    [GLCalendarDayCell appearance].todayBackgroundColor = nil;
 
