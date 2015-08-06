@@ -161,7 +161,7 @@
         topAttributes = self.range.selectedMonthTitleAttributes;
     } else if([self isToday]){
         attributes = self.todayLabelAttributes;
-        topAttributes = self.todayTitleAttributes;
+        topAttributes = self.todayMonthAttributes;
     }
 
 

@@ -39,18 +39,19 @@
     [GLCalendarView appearance].monthCoverYearAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:24],
                                                          NSForegroundColorAttributeName:[UIColor grayColor]};
 
+    // have no idea on why the hell this appearance selectors still working?
+    // if you will experience problem with compilation - just remove all *.cell* properties
+    // they set in a different place, actually
     [GLCalendarView appearance].cellEvenMonthBackgroundColor = [UIColor whiteColor];
     [GLCalendarView appearance].cellOddMonthBackgroundColor = [UIColor whiteColor];
 
     [GLCalendarView appearance].cellEditCoverPadding = 0;
 
-//    [GLCalendarView appearance].rangeDisplayMode = RANGE_DISPLAY_MODE_SINGLE;
-
     [GLCalendarView appearance].cellDayLabelAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:UIColorFromRGB(0x555555)};
 
     [GLCalendarView appearance].cellTodayLabelAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:[UIColor grayColor]};
 
-    [GLCalendarView appearance].cellTodayTitleAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:12], NSForegroundColorAttributeName:[UIColor grayColor]};
+    [GLCalendarView appearance].cellTodayMonthAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:12], NSForegroundColorAttributeName:[UIColor grayColor]};
 
     [GLCalendarView appearance].cellDayDisabledLabelAttributes = @{
                                                                   NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:UIColorFromRGB(0xEEEEEE)
