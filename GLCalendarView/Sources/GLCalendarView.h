@@ -26,7 +26,7 @@ enum RANGE_DISPLAY_MODE;
 
 @interface GLCalendarView : UIView
 @property (nonatomic) CGFloat padding;
-@property (nonatomic) CGFloat rowHeight;
+@property (nonatomic) CGFloat cellSide;
 @property (nonatomic, strong) NSDictionary *weekDayTitleAttributes UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) NSDictionary *monthCoverAttributes UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) NSDictionary *monthCoverYearAttributes UI_APPEARANCE_SELECTOR;

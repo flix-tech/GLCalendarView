@@ -30,7 +30,7 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 
     
-    [GLCalendarView appearance].rowHeight = CGRectGetWidth([UIScreen mainScreen].bounds)/7;
+    [GLCalendarView appearance].cellSide = CGRectGetWidth([UIScreen mainScreen].bounds)/7;
     [GLCalendarView appearance].padding = 0;
 
     [GLCalendarView appearance].weekDayTitleAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:10], NSForegroundColorAttributeName:[UIColor grayColor]};

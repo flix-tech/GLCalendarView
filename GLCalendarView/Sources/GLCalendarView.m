@@ -142,7 +142,6 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 {
     GLCalendarView *appearance = [[self class] appearance];
     self.padding = appearance.padding;
-    self.rowHeight = appearance.rowHeight ?: DEFAULT_ROW_HEIGHT;
     self.weekDayTitleAttributes = appearance.weekDayTitleAttributes ?: @{NSFontAttributeName:[UIFont systemFontOfSize:8], NSForegroundColorAttributeName:[UIColor grayColor]};
     self.monthCoverAttributes = appearance.monthCoverAttributes ?: @{NSFontAttributeName:[UIFont systemFontOfSize:30]};
     self.monthCoverYearAttributes = appearance.monthCoverYearAttributes ?: self.monthCoverAttributes;
@@ -155,7 +154,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
 - (void)reload
 {
-    [self.monthCoverView updateWithFirstDate:self.firstDate lastDate:self.lastDate calendar:self.calendar rowHeight:self.rowHeight];
+    [self.monthCoverView updateWithFirstDate:self.firstDate lastDate:self.lastDate calendar:self.calendar rowHeight:self.cellWidth];
     [self.collectionView reloadData];
 }
 
@@ -191,7 +190,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 {
     NSInteger item = [GLDateUtils daysBetween:self.firstDate and:date];
 
-    CGPoint offset = CGPointMake(0, (item/7)*self.rowHeight);
+    CGPoint offset = CGPointMake(0, (item/7)*self.cellWidth);
 
     [self.collectionView setContentOffset: offset animated:YES];
 }
@@ -213,13 +212,18 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     NSInteger insetRows = 6;
     NSInteger weekDays  = 7;
 
+    if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_1) {
+        // we have better performance, let's do it :)
+        insetRows = 10;
+    }
+
     NSInteger insetDays = insetRows * weekDays;
 
     // adding extra rows to the date - 10 rows to the top, 10 to the bottom...
     self.firstDate = [GLDateUtils dateByAddingDays:-insetDays toDate:restrictSelectionWithRange.beginDate];
     self.lastDate  = [GLDateUtils dateByAddingDays: insetDays toDate:restrictSelectionWithRange.endDate];
 
-    CGFloat cellHeight = [GLCalendarView appearance].rowHeight ?: self.cellWidth;
+    CGFloat cellHeight = self.cellWidth;
     CGFloat insetHeight = cellHeight * insetRows;
 
     self.collectionView.contentInset = UIEdgeInsetsMake(-insetHeight, 0, -insetHeight, 0);
@@ -384,11 +388,14 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake( self.cellWidth, self.rowHeight);
+    return CGSizeMake( self.cellWidth, self.cellWidth);
 }
 
 - (CGFloat)cellWidth
 {
+    if (self.cellSide) {
+        return self.cellSide;
+    }
     return (CGRectGetWidth(self.bounds) - self.padding * 2) / 7;
 }
 
@@ -632,7 +639,7 @@ static NSDate *today;
 
 - (NSIndexPath *)indexPathAtLocation:(CGPoint)location
 {
-    NSInteger row = location.y / self.rowHeight;
+    NSInteger row = location.y / self.cellWidth;
     CGFloat col = (location.x - self.padding) / self.cellWidth;
     NSInteger item = row * 7 + floorf(col);
     return [NSIndexPath indexPathForItem:item inSection:0];
@@ -643,7 +650,7 @@ static NSDate *today;
     NSInteger dayDiff = [GLDateUtils daysBetween:self.firstDate and:date];
     NSInteger row = dayDiff / 7;
     NSInteger col = dayDiff % 7;
-    return CGRectMake(self.padding + col * self.cellWidth, row * self.rowHeight, self.cellWidth, self.rowHeight);
+    return CGRectMake(self.padding + col * self.cellWidth, row * self.cellWidth, self.cellWidth, self.cellWidth);
 }
 
 
