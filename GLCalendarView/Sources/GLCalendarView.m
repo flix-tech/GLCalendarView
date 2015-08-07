@@ -30,9 +30,6 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UIView *weekDayTitle;
 @property (weak, nonatomic) IBOutlet GLCalendarMonthCoverView *monthCoverView;
-@property (weak, nonatomic) IBOutlet UIView *magnifierContainer;
-@property (weak, nonatomic) IBOutlet UIImageView *maginifierContentView;
-
 @property (strong, nonatomic) NSMutableDictionary *cellDates;
 @property (strong, nonatomic) GLCalendarDate *today;
 
@@ -99,9 +96,6 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     [self.collectionView addGestureRecognizer:self.dragBeginDateGesture];
     [self.collectionView addGestureRecognizer:self.dragEndDateGesture];
     
-    [self addSubview:self.magnifierContainer];
-    self.magnifierContainer.hidden = YES;
-
     [self reloadAppearance];
 }
 
@@ -505,12 +499,10 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         self.draggingBeginDate = YES;
         [self reloadCellOnDate:self.rangeUnderEdit.beginDate];
-        [self showMagnifierAboveDate:self.rangeUnderEdit.beginDate];
         return;
     }
     if (recognizer.state == UIGestureRecognizerStateEnded) {
         self.draggingBeginDate = NO;
-        [self hideMagnifier];
         [self reloadCellOnDate:self.rangeUnderEdit.beginDate];
         return;
     }
@@ -543,8 +535,6 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
         } else {
             [self reloadFromBeginDate:date.date toDate:originalBeginDate];
         }
-        [self showMagnifierAboveDate:self.rangeUnderEdit.beginDate];
-
         if ([self.delegate respondsToSelector:@selector(calenderView:didUpdateRange:toBeginDate:endDate:)]) {
             [self.delegate calenderView:self didUpdateRange:self.rangeUnderEdit toBeginDate:date.date endDate:self.rangeUnderEdit.endDate];
         }
@@ -556,12 +546,10 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         self.draggingEndDate = YES;
         [self reloadCellOnDate:self.rangeUnderEdit.endDate];
-        [self showMagnifierAboveDate:self.rangeUnderEdit.endDate];
         return;
     }
     if (recognizer.state == UIGestureRecognizerStateEnded) {
         self.draggingEndDate = NO;
-        [self hideMagnifier];
         [self reloadCellOnDate:self.rangeUnderEdit.endDate];
         return;
     }
@@ -590,45 +578,8 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
         } else {
             [self reloadFromBeginDate:date.date toDate:originalEndDate];
         }
-        [self showMagnifierAboveDate:self.rangeUnderEdit.endDate];
         [self.delegate calenderView:self didUpdateRange:self.rangeUnderEdit toBeginDate:self.rangeUnderEdit.beginDate endDate:date.date];
     }
-}
-
-# pragma mark - maginifier
-
-- (void)showMagnifierAboveDate:(NSDate *)date
-{
-    if (!self.showMaginfier) {
-        return;
-    }
-    GLCalendarDayCell *cell = (GLCalendarDayCell *)[self collectionView:self.collectionView cellForItemAtIndexPath:[self indexPathForDate:date]];
-    CGFloat delta = self.cellWidth / 2;
-    if (self.draggingBeginDate) {
-        delta = delta;
-    } else {
-        delta = -delta;
-    }
-    UIGraphicsBeginImageContextWithOptions(self.maginifierContentView.frame.size, YES, 0.0);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextFillRect(context, self.maginifierContentView.bounds);
-    CGContextTranslateCTM(context, -cell.center.x + delta, -cell.center.y);
-    CGContextTranslateCTM(context, self.maginifierContentView.frame.size.width / 2, self.maginifierContentView.frame.size.height / 2);
-    [self.collectionView.layer renderInContext:context];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    self.maginifierContentView.image = image;
-    self.magnifierContainer.center = [self convertPoint:CGPointMake(cell.center.x - delta - 58, cell.center.y - 90) fromView:self.collectionView];
-    self.magnifierContainer.hidden = NO;
-}
-
-- (void)hideMagnifier
-{
-    if (!self.showMaginfier) {
-        return;
-    }
-    self.magnifierContainer.hidden = YES;
 }
 
 - (IBAction)backToTodayButtonPressed:(id)sender
@@ -696,14 +647,9 @@ static NSDate *today;
     for (NSInteger i = beginIndex; i <= endIndex; i++) {
         [indexPaths addObject:[NSIndexPath indexPathForItem:i inSection:0]];
     }
-    // prevent crash: too many update animations on one view - limit is 31 in flight at a time
-//    if (indexPaths.count > 1) {
-//        [self.collectionView reloadData];
-//    } else {
-        [UIView performWithoutAnimation:^{
-            [self.collectionView reloadItemsAtIndexPaths:indexPaths];
-        }];
-//    }
+    [UIView performWithoutAnimation:^{
+        [self.collectionView reloadItemsAtIndexPaths:indexPaths];
+    }];
 }
 
 - (NSIndexPath *)indexPathForDate:(NSDate *)date

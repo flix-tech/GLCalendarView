@@ -19,11 +19,6 @@
 		FA2D5F891AF0C129003D4CE7 /* GLCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2D5F791AF0C129003D4CE7 /* GLCalendarView.m */; };
 		FA2D5F8A1AF0C129003D4CE7 /* GLCalendarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA2D5F7A1AF0C129003D4CE7 /* GLCalendarView.xib */; };
 		FA2D5F8B1AF0C129003D4CE7 /* GLDateUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2D5F7C1AF0C129003D4CE7 /* GLDateUtils.m */; };
-		FA2D5F8C1AF0C129003D4CE7 /* gl-calendar-magnify-glass.png in Resources */ = {isa = PBXBuildFile; fileRef = FA2D5F7E1AF0C129003D4CE7 /* gl-calendar-magnify-glass.png */; };
-		FA2D5F8D1AF0C129003D4CE7 /* gl-calendar-magnify-glass@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA2D5F7F1AF0C129003D4CE7 /* gl-calendar-magnify-glass@2x.png */; };
-		FA2D5F8E1AF0C129003D4CE7 /* gl-calendar-shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = FA2D5F801AF0C129003D4CE7 /* gl-calendar-shadow.png */; };
-		FA2D5F8F1AF0C129003D4CE7 /* gl-calendar-shadow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA2D5F811AF0C129003D4CE7 /* gl-calendar-shadow@2x.png */; };
-		FA2D5F901AF0C129003D4CE7 /* gl-calendar-shadow@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA2D5F821AF0C129003D4CE7 /* gl-calendar-shadow@3x.png */; };
 		FA2D5F951AF0C1D2003D4CE7 /* GLCalendarViewDemoController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2D5F931AF0C1D2003D4CE7 /* GLCalendarViewDemoController.m */; };
 		FA2D5F961AF0C1D2003D4CE7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA2D5F941AF0C1D2003D4CE7 /* Main.storyboard */; };
 /* End PBXBuildFile section */
@@ -62,11 +57,6 @@
 		FA2D5F7A1AF0C129003D4CE7 /* GLCalendarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GLCalendarView.xib; sourceTree = "<group>"; };
 		FA2D5F7B1AF0C129003D4CE7 /* GLDateUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLDateUtils.h; sourceTree = "<group>"; };
 		FA2D5F7C1AF0C129003D4CE7 /* GLDateUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLDateUtils.m; sourceTree = "<group>"; };
-		FA2D5F7E1AF0C129003D4CE7 /* gl-calendar-magnify-glass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gl-calendar-magnify-glass.png"; sourceTree = "<group>"; };
-		FA2D5F7F1AF0C129003D4CE7 /* gl-calendar-magnify-glass@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gl-calendar-magnify-glass@2x.png"; sourceTree = "<group>"; };
-		FA2D5F801AF0C129003D4CE7 /* gl-calendar-shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gl-calendar-shadow.png"; sourceTree = "<group>"; };
-		FA2D5F811AF0C129003D4CE7 /* gl-calendar-shadow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gl-calendar-shadow@2x.png"; sourceTree = "<group>"; };
-		FA2D5F821AF0C129003D4CE7 /* gl-calendar-shadow@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gl-calendar-shadow@3x.png"; sourceTree = "<group>"; };
 		FA2D5F921AF0C1D2003D4CE7 /* GLCalendarViewDemoController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLCalendarViewDemoController.h; sourceTree = "<group>"; };
 		FA2D5F931AF0C1D2003D4CE7 /* GLCalendarViewDemoController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLCalendarViewDemoController.m; sourceTree = "<group>"; };
 		FA2D5F941AF0C1D2003D4CE7 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -159,7 +149,6 @@
 				FA2D5F7A1AF0C129003D4CE7 /* GLCalendarView.xib */,
 				FA2D5F7B1AF0C129003D4CE7 /* GLDateUtils.h */,
 				FA2D5F7C1AF0C129003D4CE7 /* GLDateUtils.m */,
-				FA2D5F7D1AF0C129003D4CE7 /* Images */,
 				7C9F5D5F1B711E49002AA3D0 /* GLCalendarDate.h */,
 				7C9F5D601B711E49002AA3D0 /* GLCalendarDate.m */,
 			);
@@ -175,18 +164,6 @@
 				FA2D5F731AF0C129003D4CE7 /* GLCalendarDayCellBackgroundCover.m */,
 			);
 			path = GLCalendarDayCell;
-			sourceTree = "<group>";
-		};
-		FA2D5F7D1AF0C129003D4CE7 /* Images */ = {
-			isa = PBXGroup;
-			children = (
-				FA2D5F7E1AF0C129003D4CE7 /* gl-calendar-magnify-glass.png */,
-				FA2D5F7F1AF0C129003D4CE7 /* gl-calendar-magnify-glass@2x.png */,
-				FA2D5F801AF0C129003D4CE7 /* gl-calendar-shadow.png */,
-				FA2D5F811AF0C129003D4CE7 /* gl-calendar-shadow@2x.png */,
-				FA2D5F821AF0C129003D4CE7 /* gl-calendar-shadow@3x.png */,
-			);
-			path = Images;
 			sourceTree = "<group>";
 		};
 		FA2D5F911AF0C18E003D4CE7 /* Demo */ = {
@@ -279,13 +256,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA2D5F8D1AF0C129003D4CE7 /* gl-calendar-magnify-glass@2x.png in Resources */,
-				FA2D5F901AF0C129003D4CE7 /* gl-calendar-shadow@3x.png in Resources */,
-				FA2D5F8C1AF0C129003D4CE7 /* gl-calendar-magnify-glass.png in Resources */,
 				FA2D5F961AF0C1D2003D4CE7 /* Main.storyboard in Resources */,
 				FA2D5F8A1AF0C129003D4CE7 /* GLCalendarView.xib in Resources */,
-				FA2D5F8E1AF0C129003D4CE7 /* gl-calendar-shadow.png in Resources */,
-				FA2D5F8F1AF0C129003D4CE7 /* gl-calendar-shadow@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

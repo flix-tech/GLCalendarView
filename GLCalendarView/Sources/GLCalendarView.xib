@@ -8,8 +8,6 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GLCalendarView">
             <connections>
                 <outlet property="collectionView" destination="Jy8-ul-cKo" id="q9l-Le-Oba"/>
-                <outlet property="maginifierContentView" destination="1EP-DG-pRq" id="1Sf-G3-GB9"/>
-                <outlet property="magnifierContainer" destination="o6e-VN-d86" id="TBW-rb-5ds"/>
                 <outlet property="monthCoverView" destination="Bj7-Yr-WTM" id="F1l-UQ-1Nk"/>
                 <outlet property="weekDayTitle" destination="jKE-iR-rqI" id="dlC-lb-YSf"/>
             </connections>
@@ -39,7 +37,7 @@
                     </constraints>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="64" maxX="0.0" maxY="-64"/>
                 </view>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" image="gl-calendar-shadow.png" translatesAutoresizingMaskIntoConstraints="NO" id="pi1-Sv-lrh">
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pi1-Sv-lrh">
                     <rect key="frame" x="0.0" y="28" width="320" height="1"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.0"/>
@@ -47,18 +45,6 @@
                         <constraint firstAttribute="height" constant="1" id="IY7-oL-gsS"/>
                     </constraints>
                 </imageView>
-                <view hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o6e-VN-d86" userLabel="magnify glass">
-                    <rect key="frame" x="102" y="247" width="115" height="74"/>
-                    <subviews>
-                        <imageView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1EP-DG-pRq">
-                            <rect key="frame" x="8" y="3" width="100" height="52"/>
-                            <color key="backgroundColor" white="0.89521555659999996" alpha="1" colorSpace="calibratedWhite"/>
-                        </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" image="gl-calendar-magnify-glass.png" translatesAutoresizingMaskIntoConstraints="NO" id="AsB-S4-8Jq">
-                            <rect key="frame" x="0.0" y="0.0" width="115" height="74"/>
-                        </imageView>
-                    </subviews>
-                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
@@ -80,10 +66,6 @@
             <point key="canvasLocation" x="-16" y="636"/>
         </view>
     </objects>
-    <resources>
-        <image name="gl-calendar-magnify-glass.png" width="115" height="74"/>
-        <image name="gl-calendar-shadow.png" width="50" height="7"/>
-    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
