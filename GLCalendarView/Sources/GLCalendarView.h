@@ -65,10 +65,16 @@ enum RANGE_DISPLAY_MODE;
 @property (nonatomic, strong) NSMutableArray *ranges;
 @property (nonatomic) BOOL showMaginfier;
 @property (nonatomic, weak) id<GLCalendarViewDelegate> delegate;
-@property (nonatomic, strong) GLCalendarDateRange *restrictSelectionWithRange;
+/*!
+ Set dates range for calendar, affects [GLCalendarView firstDate] & [GLCalendarView lastDate]
+ This method should be called after calendar appearance is set up, custom ranges added. This will cause calendar to reload completely.
+ */
+@property (nonatomic, strong) GLCalendarDateRange *calendarDisplayRange;
 - (void)reload;
 - (void)addRange:(GLCalendarDateRange *)range;
 - (void)removeRange:(GLCalendarDateRange *)range;
+- (void)addRange:(GLCalendarDateRange *)range reload: (BOOL) reload;
+- (void)removeRange:(GLCalendarDateRange *)range reload: (BOOL) reload;
 - (void)updateRange:(GLCalendarDateRange *)range withBeginDate:(NSDate *)beginDate endDate:(NSDate *)endDate;
 - (void)forceFinishEdit;
 - (void)beginToEditRange:(GLCalendarDateRange *)range;

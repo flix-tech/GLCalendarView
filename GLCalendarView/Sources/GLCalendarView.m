@@ -160,14 +160,28 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
 - (void)addRange:(GLCalendarDateRange *)range
 {
-    [self.ranges addObject:range];
-    [self reloadFromBeginDate:range.beginDate toDate:range.endDate];
+    [self addRange:range reload:YES];
 }
 
 - (void)removeRange:(GLCalendarDateRange *)range
 {
+    [self removeRange:range reload:YES];
+}
+
+- (void)addRange:(GLCalendarDateRange *)range reload: (BOOL) reload
+{
+    [self.ranges addObject:range];
+    if (reload) {
+        [self reloadFromBeginDate:range.beginDate toDate:range.endDate];
+    }
+}
+
+- (void)removeRange:(GLCalendarDateRange *)range reload: (BOOL) reload
+{
     [self.ranges removeObject:range];
-    [self reloadFromBeginDate:range.beginDate toDate:range.endDate];
+    if (reload) {
+        [self reloadFromBeginDate:range.beginDate toDate:range.endDate];
+    }
 }
 
 - (void)updateRange:(GLCalendarDateRange *)range withBeginDate:(NSDate *)beginDate endDate:(NSDate *)endDate
@@ -197,19 +211,19 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
 #pragma mark - restricted dates range
 
-- (void)setRestrictSelectionWithRange:(GLCalendarDateRange *)restrictSelectionWithRange
+- (void)setCalendarDisplayRange:(GLCalendarDateRange *)restrictSelectionWithRange
 {
-    _restrictSelectionWithRange = restrictSelectionWithRange;
+    _calendarDisplayRange = restrictSelectionWithRange;
 
     // how many rows to put in 'inset' area
 
-    if (!_restrictSelectionWithRange) {
+    if (!_calendarDisplayRange) {
         // we cancelled restrictions
         self.collectionView.contentInset = UIEdgeInsetsZero;
         return;
     }
 
-    NSInteger insetRows = 6;
+    NSInteger insetRows = 6; //maximum possible rows to fit one month
     NSInteger weekDays  = 7;
 
     if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_1) {
@@ -230,7 +244,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
     [self reload];
 
-    [self scrollToDate:self.restrictSelectionWithRange.beginDate animated:NO];
+    [self scrollToDate:self.calendarDisplayRange.beginDate animated:NO];
 }
 
 # pragma mark - getter & setter
@@ -307,8 +321,8 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     }
 
     BOOL disabled = NO;
-    if (self.restrictSelectionWithRange) {
-        disabled = ![self.restrictSelectionWithRange containsDate: date.date];
+    if (self.calendarDisplayRange) {
+        disabled = ![self.calendarDisplayRange containsDate: date.date];
     }
 
     [cell setDate:date range:[self selectedRangeForDate:date.date] cellPosition:cellPosition enlargePoint:enlargePoint disabled: disabled isToday: [self.today isTheSameDayAs: date]];
@@ -680,13 +694,13 @@ static NSDate *today;
         [indexPaths addObject:[NSIndexPath indexPathForItem:i inSection:0]];
     }
     // prevent crash: too many update animations on one view - limit is 31 in flight at a time
-    if (indexPaths.count > 1) {
-        [self.collectionView reloadData];
-    } else {
+//    if (indexPaths.count > 1) {
+//        [self.collectionView reloadData];
+//    } else {
         [UIView performWithoutAnimation:^{
             [self.collectionView reloadItemsAtIndexPaths:indexPaths];
         }];
-    }
+//    }
 }
 
 - (NSIndexPath *)indexPathForDate:(NSDate *)date

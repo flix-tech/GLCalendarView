@@ -65,14 +65,14 @@
 //    self.calendarView.firstDate = [GLDateUtils dateByAddingDays: -90 toDate:[NSDate date]];
 //    self.calendarView.lastDate  = [GLDateUtils dateByAddingDays: 300 toDate: self.calendarView.firstDate];
 
-    GLCalendarDateRange* restrictions = [GLCalendarDateRange rangeWithBeginDate:[GLDateUtils dateByAddingDays:0 toDate:[NSDate date]] endDate:[GLDateUtils dateByAddingDays: 183 toDate: [NSDate date]]];
+    GLCalendarDateRange* displayRange = [GLCalendarDateRange rangeWithBeginDate:[GLDateUtils dateByAddingDays:0 toDate:[NSDate date]] endDate:[GLDateUtils dateByAddingDays: 183 toDate: [NSDate date]]];
 
-    self.calendarView.restrictSelectionWithRange = restrictions;
+    self.calendarView.calendarDisplayRange = displayRange;
 }
 
 - (BOOL)calenderView:(GLCalendarView *)calendarView canAddRangeWithBeginDate:(NSDate *)beginDate
 {
-    if ([beginDate compare: calendarView.restrictSelectionWithRange.beginDate] != NSOrderedAscending) {
+    if ([self.calendarView.calendarDisplayRange containsDate: beginDate]) {
         return YES;
     }
     return NO;
