@@ -442,14 +442,19 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     self.rangeUnderEdit = range;
     self.rangeUnderEdit.inEdit = YES;
     [self reloadFromBeginDate:self.rangeUnderEdit.beginDate toDate:self.rangeUnderEdit.endDate];
-    [self.delegate calenderView:self beginToEditRange:range];
+    if ([self.delegate respondsToSelector:@selector(calenderView:beginToEditRange:)]) {
+        [self.delegate calenderView:self beginToEditRange:range];
+    }
 }
 
 - (void)finishEditRange:(GLCalendarDateRange *)range continueEditing:(BOOL)continueEditing
 {
     self.rangeUnderEdit.inEdit = NO;
     [self reloadFromBeginDate:self.rangeUnderEdit.beginDate toDate:self.rangeUnderEdit.endDate];
-    [self.delegate calenderView:self finishEditRange:self.rangeUnderEdit continueEditing:continueEditing];
+    if ([self.delegate respondsToSelector:@selector(calenderView:finishEditRange:continueEditing:)]) {
+        [self.delegate calenderView:self finishEditRange:self.rangeUnderEdit continueEditing:continueEditing];
+    }
+
     self.rangeUnderEdit = nil;
 }
 
@@ -507,8 +512,12 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
         return;
     }
     
-    BOOL canUpdate = [self.delegate calenderView:self canUpdateRange:self.rangeUnderEdit toBeginDate:date.date endDate:self.rangeUnderEdit.endDate];
-    
+    BOOL canUpdate = NO;
+
+    if ([self.delegate respondsToSelector:@selector(calenderView:canUpdateRange:toBeginDate:endDate:)]) {
+        canUpdate = [self.delegate calenderView:self canUpdateRange:self.rangeUnderEdit toBeginDate:date.date endDate:self.rangeUnderEdit.endDate];
+    }
+
     if (canUpdate) {
         NSDate *originalBeginDate = [self.rangeUnderEdit.beginDate copy];
         self.rangeUnderEdit.beginDate = date.date;
@@ -518,7 +527,10 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
             [self reloadFromBeginDate:date.date toDate:originalBeginDate];
         }
         [self showMagnifierAboveDate:self.rangeUnderEdit.beginDate];
-        [self.delegate calenderView:self didUpdateRange:self.rangeUnderEdit toBeginDate:date.date endDate:self.rangeUnderEdit.endDate];
+
+        if ([self.delegate respondsToSelector:@selector(calenderView:didUpdateRange:toBeginDate:endDate:)]) {
+            [self.delegate calenderView:self didUpdateRange:self.rangeUnderEdit toBeginDate:date.date endDate:self.rangeUnderEdit.endDate];
+        }
     }
 }
 
