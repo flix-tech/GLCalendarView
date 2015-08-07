@@ -14,6 +14,7 @@
 @property (nonatomic, strong) GLCalendarDate *firstDate;
 @property (nonatomic, strong) GLCalendarDate *lastDate;
 @property (nonatomic, strong) NSDateFormatter* monthFormatter;
+@property (nonatomic, strong) NSDateFormatter* yearFormatter;
 @end
 
 @implementation GLCalendarMonthCoverView
@@ -21,10 +22,36 @@
 - (NSDateFormatter*) monthFormatter
 {
     if (!_monthFormatter) {
-        _monthFormatter = [[NSDateFormatter alloc] init];
-        _monthFormatter.dateFormat = @"MMMM";
+        _monthFormatter = [self dateFormatterWithFormat: self.monthFormat?:@"MMMM"];
     }
     return _monthFormatter;
+}
+
+- (NSDateFormatter*) yearFormatter
+{
+    if (!_yearFormatter) {
+        _yearFormatter = [self dateFormatterWithFormat: self.yearFormat?:@"yyyy"];
+    }
+    return _yearFormatter;
+}
+
+- (NSDateFormatter*) dateFormatterWithFormat: (NSString*) format
+{
+    NSDateFormatter* f = [[NSDateFormatter alloc] init];
+    f.dateFormat = format;
+    return f;
+}
+
+- (void) setMonthFormat:(NSString *)monthFormat
+{
+    _monthFormat = monthFormat;
+    self.monthFormatter = nil;
+}
+
+- (void) setYearFormat:(NSString *)yearFormat
+{
+    _yearFormat = yearFormat;
+    self.yearFormatter = nil;
 }
 
 - (void)updateWithFirstDate:(NSDate *)firstDate lastDate:(NSDate *)lastDate calendar:(NSCalendar *)calendar rowHeight:(CGFloat)rowHeight
@@ -63,7 +90,7 @@
 
             [labelWithYear appendAttributedString: labelTextAttributed];
 
-            NSString* textYear = [NSString stringWithFormat: @"%ld",(long)components.year];
+            NSString* textYear = [self.yearFormatter stringFromDate:date];//[NSString stringWithFormat: @"%ld",(long)components.year];
 
             NSAttributedString* labelYear = [[NSAttributedString alloc] initWithString:textYear attributes: self.textYearAttributes];
 

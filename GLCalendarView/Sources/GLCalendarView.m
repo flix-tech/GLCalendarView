@@ -81,7 +81,6 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     self.calendar = [GLDateUtils calendar];
     
     self.monthCoverView.hidden = YES;
-    self.monthCoverView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.4];
 
     self.collectionView.dataSource = self;
     self.collectionView.delegate = self;
@@ -148,6 +147,10 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     
     self.monthCoverView.textMonthAttributes = self.monthCoverAttributes;
     self.monthCoverView.textYearAttributes = self.monthCoverYearAttributes;
+    self.monthCoverView.backgroundColor = appearance.monthCoverBackgroundColor ?: [[UIColor whiteColor] colorWithAlphaComponent:0.5];
+    self.monthCoverView.monthFormat = appearance.monthCoverMonthFormat;
+    self.monthCoverView.yearFormat = appearance.monthCoverYearFormat;
+    
 }
 
 #pragma mark - public api
