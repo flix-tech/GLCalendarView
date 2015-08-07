@@ -203,7 +203,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
     CGPoint offset = CGPointMake(0, (item/7)*self.cellWidth);
 
-    [self.collectionView setContentOffset: offset animated:YES];
+    [self.collectionView setContentOffset: offset animated:animated];
 }
 
 #pragma mark - restricted dates range
