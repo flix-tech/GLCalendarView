@@ -174,6 +174,7 @@
     }
 
     self.dayLabel.attributedText = dayString;
+    self.dayLabel.accessibilityLabel = [self.date accessibilityLabel];
 }
 
 static NSArray *months;

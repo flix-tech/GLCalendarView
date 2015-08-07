@@ -9,6 +9,12 @@
 #import "GLCalendarDate.h"
 #import "GLDateUtils.h"
 
+@interface GLCalendarDate()
+
+@property (nonatomic, strong) NSString* accessibilityLabelText;
+
+@end
+
 @implementation GLCalendarDate
 
 - (instancetype)initWithCutDate:(NSDate *)date
@@ -74,6 +80,30 @@
     return (_day   == [components day]   &&
             _month == [components month] &&
             _year  == [components year]);
+}
+
+#pragma mark - Acceessibility
+
++ (NSDateFormatter*) accessibilityDateFormatter
+{
+    static NSDateFormatter* df;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        df = [[NSDateFormatter alloc] init];
+        df.dateStyle = NSDateFormatterLongStyle;
+        df.timeStyle = NSDateFormatterNoStyle;
+    });
+
+    return df;
+}
+
+- (NSString*) accessibilityLabel
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        self.accessibilityLabelText = [[GLCalendarDate accessibilityDateFormatter] stringFromDate:self.date];
+    });
+    return self.accessibilityLabelText;
 }
 
 #pragma mark - copy
