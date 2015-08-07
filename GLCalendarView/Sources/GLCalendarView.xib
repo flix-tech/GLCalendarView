@@ -37,29 +37,28 @@
                     </constraints>
                     <inset key="insetFor6xAndEarlier" minX="0.0" minY="64" maxX="0.0" maxY="-64"/>
                 </view>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pi1-Sv-lrh">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G4W-xi-FUQ" userLabel="separator">
                     <rect key="frame" x="0.0" y="28" width="320" height="1"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    <rect key="contentStretch" x="0.0" y="0.0" width="1" height="0.0"/>
+                    <color key="backgroundColor" red="0.94199810606060597" green="0.94199810606060597" blue="0.94199810606060597" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="1" id="IY7-oL-gsS"/>
+                        <constraint firstAttribute="height" constant="1" id="wkk-Bx-BqN"/>
                     </constraints>
-                </imageView>
+                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="pi1-Sv-lrh" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="6KW-RG-Es2"/>
+                <constraint firstAttribute="trailing" secondItem="G4W-xi-FUQ" secondAttribute="trailing" id="18t-LA-LOZ"/>
                 <constraint firstAttribute="bottom" secondItem="Bj7-Yr-WTM" secondAttribute="bottom" id="Gjw-mS-Qd7"/>
                 <constraint firstItem="Bj7-Yr-WTM" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="JAs-vv-nVz"/>
                 <constraint firstAttribute="bottom" secondItem="Jy8-ul-cKo" secondAttribute="bottom" id="Jl4-pG-ucD"/>
                 <constraint firstItem="jKE-iR-rqI" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Ncg-Rw-W2a"/>
+                <constraint firstItem="G4W-xi-FUQ" firstAttribute="top" secondItem="jKE-iR-rqI" secondAttribute="bottom" id="Y0p-Qk-wlD"/>
                 <constraint firstItem="Jy8-ul-cKo" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="aC0-oR-Yps"/>
                 <constraint firstAttribute="trailing" secondItem="jKE-iR-rqI" secondAttribute="trailing" id="eDq-ZR-PH0"/>
-                <constraint firstAttribute="trailing" secondItem="pi1-Sv-lrh" secondAttribute="trailing" id="gKP-4U-ICZ"/>
                 <constraint firstItem="Bj7-Yr-WTM" firstAttribute="top" secondItem="jKE-iR-rqI" secondAttribute="bottom" id="hWV-hj-INs"/>
                 <constraint firstAttribute="trailing" secondItem="Bj7-Yr-WTM" secondAttribute="trailing" id="iFZ-wi-xF8"/>
+                <constraint firstItem="G4W-xi-FUQ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="pgw-JG-N7S"/>
                 <constraint firstAttribute="trailing" secondItem="Jy8-ul-cKo" secondAttribute="trailing" id="qDv-8r-k67"/>
-                <constraint firstItem="pi1-Sv-lrh" firstAttribute="top" secondItem="jKE-iR-rqI" secondAttribute="bottom" id="tly-qA-ZMw"/>
                 <constraint firstItem="jKE-iR-rqI" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="xdJ-J2-pMQ"/>
                 <constraint firstItem="Bj7-Yr-WTM" firstAttribute="top" secondItem="Jy8-ul-cKo" secondAttribute="top" id="yPR-1N-oRC"/>
             </constraints>
