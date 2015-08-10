@@ -1,35 +1,39 @@
-![GLCalendarView](https://cocoapod-badges.herokuapp.com/v/GLCalendarView/badge.png)
+## Clone of [GLCalendarView](https://github.com/Glow-Inc/GLCalendarView)
 
-## Demo
-
-![GLCalendarView](https://raw.githubusercontent.com/Glow-Inc/GLCalendarView/master/demo.gif)
+###The clone is designated for the following points:
+* date picker (select one date)
+* ranges used only to customize look of calendar, no range selection by user
+* performace (it works well on iPhone4 & (surprise) up!)
+* look - it looks better
+* load time - as a consequence of performance it appears much much faster
+* customizeability (almost everything now is customizable)
 
 ## Installation
-#### CocoaPods
-With CocoaPods you can simply add `GLCalendarView` in your Podfile:
+This repo is in progress now, have to add it to cocoapods at some point.
+if you want to try my version, you have to add the line below:
 ```
-pod "GLCalendarView", "~> 1.0.0"
+pod "GLCalendarView-Custom", :git => "https://github.com/gelosi/GLCalendarView.git", :tag => 'v1.3.15.square'
 ```
-#### Source File
+
+## Source File
 You can copy all the files under the `Sources` folder into your project.
 
 ## Usage
 * Init the view by placing it in the storyboard or programmatically init it and add it to your view controller.
-* In `viewDidLoad`, set the `firstDate` and `lastDate` of the calendarView.
-* In `viewWillAppear`, set up the model data and call `[self.calendarView reload];` to refresh the calendarView.
+* In `viewDidLoad`, set the `calendarDisplayRange` (GLCalendarDateRange) of the calendarView, setting this property will refresh calendar
 
-To display some ranges in the calendar view, construct some `GLCalendarDateRange` objects, set them as the model of the calendar view
+To display some ranges in the calendar view, construct some `GLCalendarDateRange` objects, set them as the model of the calendar view. Mostly designed to display one date, but you can have some fun with it (legacy, thinking on improvement...)
+calling `addRange:` will reload calendar, if you want to add several ranges at once use `addRange:reload:`
 ```objective-c
 NSDate *today = [NSDate date];
 NSDate *beginDate = [GLDateUtils dateByAddingDays:-23 toDate:today];
 NSDate *endDate = [GLDateUtils dateByAddingDays:-18 toDate:today];
 GLCalendarDateRange *range = [GLCalendarDateRange rangeWithBeginDate:beginDate endDate:endDate];
-range.backgroundColor = COLOR_BLUE;
+range.backgroundColor = [UIColor blueColor];
 range.editable = YES;
 range.binding = yourModelObject // you can bind your model to the range
 
-self.calendarView.ranges = [@[range1] mutableCopy];
-[self.calendarView reload];
+[self.calendar addRange: range];
 ```
 
 For the binding field, it helps in that you can bind the actual model to the range, thus you can easily retrieve the corresponding model from the range later. For example, if you are building a trip app, you probably has a Trip class, you can bind the Trip instance to the range, and if the range gets updated in the calendar view, you can easily get the Trip instance from it and do some further updates.
@@ -39,6 +43,8 @@ The calendar view will handle all the user interactions including adding, updati
 @protocol GLCalendarViewDelegate <NSObject>
 - (BOOL)calenderView:(GLCalendarView *)calendarView canAddRangeWithBeginDate:(NSDate *)beginDate;
 - (GLCalendarDateRange *)calenderView:(GLCalendarView *)calendarView rangeToAddWithBeginDate:(NSDate *)beginDate;
+@optional
+- (NSArray*) calendarViewWeekDayTitles;
 - (void)calenderView:(GLCalendarView *)calendarView beginToEditRange:(GLCalendarDateRange *)range;
 - (void)calenderView:(GLCalendarView *)calendarView finishEditRange:(GLCalendarDateRange *)range continueEditing:(BOOL)continueEditing;
 - (BOOL)calenderView:(GLCalendarView *)calendarView canUpdateRange:(GLCalendarDateRange *)range toBeginDate:(NSDate *)beginDate endDate:(NSDate *)endDate;
@@ -61,7 +67,7 @@ Sample implementation:
     GLCalendarDateRange *range = [GLCalendarDateRange rangeWithBeginDate:beginDate endDate:endDate];
     range.backgroundColor = [UIColor redColor];
     range.editable = YES;
-    range.binding = yourModel // bind your model to the range instance
+    range.binding = yourModel; // bind your model to the range instance
     return range;
 }
 
@@ -93,24 +99,19 @@ Sample implementation:
 ```
 
 ## Appearance
-`GLCalendarView` 's appearance is fully customizable, you can adjust its look through the appearance api(generally your should config it in the AppDelegate), check the header file to see all customizable fields:
+`GLCalendarView` 's appearance is mostly customizable, you can adjust its look through the appearance api(generally your should config it in the AppDelegate), check the header file to see all customizable fields:
 ```objective-c
-[GLCalendarView appearance].rowHeight = 54;
-[GLCalendarView appearance].padding = 6;
-[GLCalendarView appearance].weekDayTitleAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:8], NSForegroundColorAttributeName:[UIColor grayColor]};
-[GLCalendarView appearance].monthCoverAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:30]};
+[GLCalendarView appearance].cellSide = CGRectGetWidth([UIScreen mainScreen].bounds)/7;
+    [GLCalendarView appearance].padding = 0;
 
-[GLCalendarDayCell appearance].dayLabelAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:20], NSForegroundColorAttributeName:UIColorFromRGB(0x555555)};
-[GLCalendarDayCell appearance].monthLabelAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:8]};
-    
-[GLCalendarDayCell appearance].editCoverBorderWidth = 2;
-[GLCalendarDayCell appearance].editCoverBorderColor = UIColorFromRGB(0x366aac);
-[GLCalendarDayCell appearance].editCoverPointSize = 14;
+    [GLCalendarView appearance].weekDayTitleAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:10], NSForegroundColorAttributeName:[UIColor grayColor]};
+    [GLCalendarView appearance].monthCoverAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:24],
+                                                         NSForegroundColorAttributeName:[UIColor grayColor]};
+    [GLCalendarView appearance].monthCoverYearAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:24],
+                                                         NSForegroundColorAttributeName:[UIColor grayColor]};
+    [GLCalendarView appearance].monthCoverBackgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.7];
 
-[GLCalendarDayCell appearance].todayBackgroundColor = UIColorFromRGB(0x366aac);
-[GLCalendarDayCell appearance].todayLabelAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:20]};
-
-[GLCalendarDayCell appearance].rangeDisplayMode = RANGE_DISPLAY_MODE_CONTINUOUS;
+    [GLCalendarView appearance].monthCoverYearFormat = @"''yy";
 ```
 
 You can clone the project and investigate the demo for more detailed usage~
