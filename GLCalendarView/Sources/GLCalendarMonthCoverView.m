@@ -90,8 +90,7 @@
 
             [labelWithYear appendAttributedString: labelTextAttributed];
 
-            NSString* textYear = [self.yearFormatter stringFromDate:date];//[NSString stringWithFormat: @"%ld",(long)components.year];
-
+            NSString* textYear = [self.yearFormatter stringFromDate:date];
             NSAttributedString* labelYear = [[NSAttributedString alloc] initWithString:textYear attributes: self.textYearAttributes];
 
             [labelWithYear appendAttributedString: labelYear];

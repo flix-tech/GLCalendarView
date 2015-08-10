@@ -146,11 +146,12 @@
     return [NSString stringWithFormat:@"%ld/%ld/%ld", (long)components.year, (long)components.month, (long)components.day];
 }
 
-static NSArray *months;
-+ (NSString *)monthText:(NSInteger)month {
-    if (!months) {
++ (NSString *)titleForMonthAtIndex:(NSInteger)month {
+    static NSArray *months;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         months = [[[NSDateFormatter alloc] init] shortStandaloneMonthSymbols];
-    }
+    });
     return [months objectAtIndex:(month - 1)];
 }
 

@@ -14,9 +14,6 @@
 #import "GLCalendarDayCell.h"
 #import "GLCalendarDate.h"
 
-#define UIColorFromRGB(rgbValue) \
-[UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
-
 
 @interface GLCalendarDayCell()
 @property (strong, nonatomic) IBOutlet UILabel *dayLabel;
@@ -136,16 +133,17 @@
         
     // day label and month label
     NSString* dayTitle = [NSString stringWithFormat:@"%ld", (long)day];
+    NSString* dayTopLabel;
     if ([self isToday]) {
-        [self setDayLabelText:dayTitle withTopLabel: [self today]];
+        dayTopLabel = [self today];
         if (self.todayBackgroundColor && !self.range.backgroundColor) {
             self.dayLabel.backgroundColor = self.todayBackgroundColor;
         }
     } else if(day == 1 || self.range.showMonthTitle) {
-        [self setDayLabelText: dayTitle withTopLabel: [self monthText:month]];
-    } else {
-        [self setDayLabelText:dayTitle withTopLabel: nil];
+        dayTopLabel = [self shortTitleForMonthAtIndex:month];
     }
+    
+    [self setDayLabelText:dayTitle withTopLabel: dayTopLabel];
     
 }
 
@@ -179,7 +177,7 @@
 
 static NSArray *months;
 
-- (NSString *)monthText:(NSInteger)month {
+- (NSString *)shortTitleForMonthAtIndex:(NSInteger)month {
     if (!months) {
         months = [[[[NSDateFormatter alloc] init] shortStandaloneMonthSymbols] valueForKeyPath:@"capitalizedString"];
     }

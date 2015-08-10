@@ -18,6 +18,8 @@
 @property (nonatomic, readonly) NSInteger year;
 @property (nonatomic, readonly) NSInteger monthDays;
 
+@property (nonatomic, readonly) NSString* accessibilityLabel;
+
 - (instancetype) initWithDate: (NSDate*) date;
 - (instancetype) initWithCutDate: (NSDate*) date NS_DESIGNATED_INITIALIZER;
 - (BOOL) isTheSameDayAs: (GLCalendarDate*) otherDate;

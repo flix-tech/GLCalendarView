@@ -9,23 +9,13 @@
 #import "GLCalendarDate.h"
 #import "GLDateUtils.h"
 
-@interface GLCalendarDate()
-
-@property (nonatomic, strong) NSString* accessibilityLabelText;
-
-@end
-
 @implementation GLCalendarDate
 
 - (instancetype)initWithCutDate:(NSDate *)date
 {
     self = [super init];
 
-    if (self == nil) {
-        return nil;
-    }
-
-    if (date == nil) {
+    if (!self || !date) {
         return self;
     }
 
@@ -52,6 +42,8 @@
     } else {
         _monthDays = [[GLDateUtils calendar] rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:date].length;
     }
+
+    _accessibilityLabel = [[GLCalendarDate accessibilityDateFormatter] stringFromDate:self.date];
     
     return self;
 }
@@ -90,20 +82,11 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         df = [[NSDateFormatter alloc] init];
-        df.dateStyle = NSDateFormatterLongStyle;
+        df.dateStyle = kCFDateFormatterFullStyle;
         df.timeStyle = NSDateFormatterNoStyle;
     });
 
     return df;
-}
-
-- (NSString*) accessibilityLabel
-{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        self.accessibilityLabelText = [[GLCalendarDate accessibilityDateFormatter] stringFromDate:self.date];
-    });
-    return self.accessibilityLabelText;
 }
 
 #pragma mark - copy
