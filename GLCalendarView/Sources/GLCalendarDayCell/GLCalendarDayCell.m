@@ -175,12 +175,13 @@
     self.dayLabel.accessibilityLabel = [self.date accessibilityLabel];
 }
 
-static NSArray *months;
-
 - (NSString *)shortTitleForMonthAtIndex:(NSInteger)month {
-    if (!months) {
+    static NSArray *months;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         months = [[[[NSDateFormatter alloc] init] shortStandaloneMonthSymbols] valueForKeyPath:@"capitalizedString"];
-    }
+    });
+
     return [months objectAtIndex:(month - 1)];
 }
 
