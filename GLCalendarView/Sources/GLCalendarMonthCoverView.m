@@ -10,11 +10,29 @@
 #import "GLDateUtils.h"
 #import "GLCalendarDate.h"
 
+
+/*!@
+ Idea: growth width by 2 cell sizes (1,3,5,7) unless we will fit
+ month text in a way, background will cover exactly certain cells
+ underneath
+ */
+CGFloat closestWidthToFitWidthForRowHeight(CGFloat width, CGFloat rowHeight)
+{
+    CGFloat res = rowHeight;
+    while (res < width) {
+        res += rowHeight+rowHeight;
+    }
+    return res;
+}
+
 @interface GLCalendarMonthCoverView()
 @property (nonatomic, strong) GLCalendarDate *firstDate;
 @property (nonatomic, strong) GLCalendarDate *lastDate;
 @property (nonatomic, strong) NSDateFormatter* monthFormatter;
 @property (nonatomic, strong) NSDateFormatter* yearFormatter;
+@property (nonatomic, strong) NSCalendar *calendar;
+@property (nonatomic) CGFloat cellSide;
+@property (nonatomic) CGRect  lastUsedFrame;
 @end
 
 @implementation GLCalendarMonthCoverView
@@ -54,26 +72,52 @@
     self.yearFormatter = nil;
 }
 
-- (void)updateWithFirstDate:(NSDate *)firstDate lastDate:(NSDate *)lastDate calendar:(NSCalendar *)calendar rowHeight:(CGFloat)rowHeight
+- (void) layoutSubviews
 {
-    if ([self.firstDate isTheSameDayAsDate:firstDate] &&
-        [self.lastDate isTheSameDayAsDate:lastDate]) {
+    [super layoutSubviews];
+    [self layoutWithFirstDate:self.firstDate.date lastDate:self.lastDate.date calendar:self.calendar rowHeight:self.cellSide];
+}
+
+- (void)updateWithFirstDate:(GLCalendarDate *)firstDate lastDate:(GLCalendarDate *)lastDate calendar:(NSCalendar *)calendar rowHeight:(CGFloat)rowHeight
+{
+    self.firstDate = firstDate;
+    self.lastDate = lastDate;
+    self.cellSide = rowHeight;
+    self.calendar = calendar;
+
+    [self setNeedsLayout];
+}
+
+- (void)layoutWithFirstDate:(NSDate *)firstDate lastDate:(NSDate *)lastDate calendar:(NSCalendar *)calendar rowHeight:(CGFloat)rowHeight
+{
+    // do not redraw with no need
+    if ([self.firstDate.date isEqualToDate:firstDate] &&
+        [self.lastDate.date isEqualToDate:lastDate] &&
+        self.cellSide == rowHeight &&
+        [self.calendar.calendarIdentifier isEqualToString: calendar.calendarIdentifier] &&
+        CGRectEqualToRect(self.lastUsedFrame, self.frame)) {
         return;
     }
 
+    self.lastUsedFrame = self.frame;
 
-    self.firstDate = [[GLCalendarDate alloc] initWithDate:firstDate];
-    self.lastDate = [[GLCalendarDate alloc] initWithDate:lastDate];
-    
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 
     NSDateComponents *today = [calendar components:NSCalendarUnitYear fromDate:[NSDate date]];
+
+    NSInteger previousDayDiff = 0;
     
     for (NSDate *date = [GLDateUtils monthFirstDate:firstDate]; [date compare:lastDate] < 0; date = [GLDateUtils dateByAddingMonths:1 toDate:date]) {
         NSInteger dayDiff = [GLDateUtils daysBetween:firstDate and:date];
         if (dayDiff < 0) {
             continue;
         }
+
+        NSDateComponents *dayOfWeek = [calendar components:NSCalendarUnitWeekday fromDate:date];
+        // this strange formula will produce a half of number of lines required to show a month
+        CGFloat labelRowsOffset = 1 + ((10*(dayDiff - previousDayDiff - dayOfWeek.weekday - 1)) / 70) / 2.f;
+
+        previousDayDiff = dayDiff;
         
         NSDateComponents *components = [calendar components:NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear fromDate:date];
 
@@ -99,8 +143,18 @@
         }
         
         monthLabel.attributedText = labelTextAttributed;
-        monthLabel.center = CGPointMake(CGRectGetMidX(self.bounds), ceilf(rowHeight * (dayDiff / 7 + 2)));
-        monthLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        [monthLabel sizeToFit];
+
+        CGRect currentLabelRect = monthLabel.frame;
+        currentLabelRect.size.width = closestWidthToFitWidthForRowHeight(CGRectGetWidth(monthLabel.frame), rowHeight);
+        if (labelRowsOffset - floorf(labelRowsOffset) > 0) {
+            // for labels covering date numbers we want certain height
+            currentLabelRect.size.height = rowHeight;
+        }
+        monthLabel.frame = currentLabelRect;
+        monthLabel.center = CGPointMake(CGRectGetMidX(self.bounds), ceilf(  rowHeight * (dayDiff / 7 + labelRowsOffset)));
+//        monthLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        monthLabel.backgroundColor = self.backgroundColor;
 
         [self addSubview:monthLabel];
     }

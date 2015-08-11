@@ -52,6 +52,7 @@ enum RANGE_DISPLAY_MODE;
 @property (nonatomic, strong) NSDictionary *cellTodayMonthAttributes;
 
 @property (nonatomic, strong) NSDictionary *cellDayDisabledLabelAttributes;
+@property (nonatomic, strong) NSDictionary *cellDayDisabledMonthAttributes;
 @property (nonatomic, strong) UIColor *cellTodayBackgroundColor;
 
 @property (nonatomic) CGFloat cellEditCoverPadding;

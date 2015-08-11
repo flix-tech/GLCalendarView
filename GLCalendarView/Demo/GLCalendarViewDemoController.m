@@ -35,36 +35,19 @@
     self.calendarView.showMaginfier = NO;
 
     [self setupCellsAppearance];
+
+    GLCalendarDateRange* displayRange = [GLCalendarDateRange rangeWithBeginDate:[GLDateUtils dateByAddingDays:4 toDate:[NSDate date]] endDate:[GLDateUtils dateByAddingDays: 183 toDate: [NSDate date]]];
+
+    self.calendarView.calendarDisplayRange = displayRange;
+
+//    [self.calendarView reload];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:YES];
-    
-//    NSDate *today = [NSDate date];
-//
-//    NSDate *beginDate1 = [GLDateUtils dateByAddingDays:-32 toDate:today];
-//    NSDate *endDate1 = [GLDateUtils dateByAddingDays:-26 toDate:today];
-//    GLCalendarDateRange *range1 = [GLCalendarDateRange rangeWithBeginDate:beginDate1 endDate:endDate1];
-//    range1.backgroundColor = UIColorFromRGB(0x79a9cd);
-//    range1.editable = YES;
-//    
-//    NSDate *beginDate2 = [GLDateUtils dateByAddingDays:-60 toDate:today];
-//    NSDate *endDate2 = [GLDateUtils dateByAddingDays:-1 toDate:today];
-//    GLCalendarDateRange *range2 = [GLCalendarDateRange rangeWithBeginDate:beginDate2 endDate:endDate2];
-////    range2.backgroundColor =;
-//    range2.showMonthTitle = NO;
-//    range2.editable = NO;
-////
-//    self.calendarView.ranges = [@[range2] mutableCopy];
-//
 
-//    self.calendarView.firstDate = [GLDateUtils dateByAddingDays: -90 toDate:[NSDate date]];
-//    self.calendarView.lastDate  = [GLDateUtils dateByAddingDays: 300 toDate: self.calendarView.firstDate];
-
-    GLCalendarDateRange* displayRange = [GLCalendarDateRange rangeWithBeginDate:[GLDateUtils dateByAddingDays:0 toDate:[NSDate date]] endDate:[GLDateUtils dateByAddingDays: 183 toDate: [NSDate date]]];
-
-    self.calendarView.calendarDisplayRange = displayRange;
+    [self.calendarView scrollToDate:self.calendarView.lastDate animated:NO];
 }
 
 - (BOOL)calenderView:(GLCalendarView *)calendarView canAddRangeWithBeginDate:(NSDate *)beginDate
@@ -154,8 +137,12 @@
     calendarView.cellDayDisabledLabelAttributes = @{
                                                                    NSFontAttributeName:[UIFont boldSystemFontOfSize:20], NSForegroundColorAttributeName:[UIColor lightGrayColor]
                                                                    };
+    calendarView.cellDayDisabledMonthAttributes = @{
+                                                    NSFontAttributeName:[UIFont boldSystemFontOfSize:12],
+                                                    NSForegroundColorAttributeName:[UIColor redColor]
+                                                    };
     calendarView.cellMonthLabelAttributes = @{NSFontAttributeName:[UIFont boldSystemFontOfSize:12],
-                                                             NSForegroundColorAttributeName:[UIColor grayColor]};
+                                                             NSForegroundColorAttributeName:[UIColor lightGrayColor]};
 
     calendarView.cellEditCoverBorderWidth = 0;
     calendarView.cellEditCoverBorderColor = [UIColor yellowColor];

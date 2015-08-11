@@ -32,13 +32,14 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 @property (weak, nonatomic) IBOutlet GLCalendarMonthCoverView *monthCoverView;
 @property (strong, nonatomic) NSMutableDictionary *cellDates;
 @property (strong, nonatomic) GLCalendarDate *today;
-
+@property (nonatomic, strong, readonly) GLCalendarDate *firstGLDate;
+@property (nonatomic, strong, readonly) GLCalendarDate *lastGLDate;
 @end
 
 @implementation GLCalendarView
 
-@synthesize firstDate = _firstDate;
-@synthesize lastDate = _lastDate;
+//@synthesize firstDate = _firstDate;
+//@synthesize lastDate = _lastDate;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -102,8 +103,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    [self setupWeekDayTitle];
-}
+    [self setupWeekDayTitle];}
 
 - (void)setupWeekDayTitle
 {
@@ -151,7 +151,6 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
 - (void)reload
 {
-    [self.monthCoverView updateWithFirstDate:self.firstDate lastDate:self.lastDate calendar:self.calendar rowHeight:self.cellWidth];
     [self.collectionView reloadData];
 }
 
@@ -239,9 +238,9 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
     self.collectionView.contentInset = UIEdgeInsetsMake(-insetHeight, 0, -insetHeight, 0);
 
-    [self reload];
+    // set up overlay view
+    [self.monthCoverView updateWithFirstDate:self.firstGLDate lastDate:self.lastGLDate calendar:self.calendar rowHeight:self.cellWidth];
 
-    [self scrollToDate:self.calendarDisplayRange.beginDate animated:NO];
 }
 
 # pragma mark - getter & setter
@@ -249,31 +248,32 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 - (void)setFirstDate:(NSDate *)firstDate
 {
     NSDate* newDate = [GLDateUtils weekFirstDate:[GLDateUtils cutDate:firstDate]];
-    if (!_firstDate || [_firstDate compare:newDate] != NSOrderedSame) {
+    if (!_firstGLDate || [_firstGLDate.date compare:newDate] != NSOrderedSame) {
         self.cellDates = [NSMutableDictionary dictionaryWithCapacity:366];
     }
-    _firstDate = newDate;
+    _firstGLDate = [[GLCalendarDate alloc] initWithCutDate: newDate];
 }
 
 - (NSDate *)firstDate
 {
-    if (!_firstDate) {
+    if (!_firstGLDate) {
         self.firstDate = [GLDateUtils dateByAddingDays:-365 toDate:self.today.date];
     }
-    return _firstDate;
+    return _firstGLDate.date;
 }
 
 - (void)setLastDate:(NSDate *)lastDate
 {
-    _lastDate = [GLDateUtils weekLastDate:[GLDateUtils cutDate:lastDate]];
+    NSDate *Date = [GLDateUtils weekLastDate:[GLDateUtils cutDate:lastDate]];
+    _lastGLDate = [[GLCalendarDate alloc] initWithCutDate: Date];
 }
 
 - (NSDate *)lastDate
 {
-    if (!_lastDate) {
+    if (!_lastGLDate) {
         self.lastDate = [GLDateUtils dateByAddingDays:30 toDate:self.today.date];
     }
-    return _lastDate;
+    return _lastGLDate.date;
 }
 
 # pragma mark - UICollectionView data source
@@ -606,6 +606,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     cell.editCoverBorderColor = self.cellEditCoverBorderColor;
     cell.editCoverPointScale = self.cellEditCoverPointScale;
     cell.editCoverPointSize = self.cellEditCoverPointSize;
+    cell.dayDisabledMonthAttributes = self.cellDayDisabledMonthAttributes;
 }
 
 # pragma mark - helper

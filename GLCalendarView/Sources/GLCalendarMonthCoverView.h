@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class GLCalendarDate;
 @interface GLCalendarMonthCoverView : UIScrollView
 @property (nonatomic, strong) NSDictionary *textMonthAttributes;
 @property (nonatomic, strong) NSDictionary *textYearAttributes;
 @property (nonatomic, strong) NSString* monthFormat;
 @property (nonatomic, strong) NSString* yearFormat;
 
-- (void)updateWithFirstDate:(NSDate *)firstDate lastDate:(NSDate *)lastDate calendar:(NSCalendar *)calendar rowHeight:(CGFloat)rowHeight;
+- (void)updateWithFirstDate:(GLCalendarDate *)firstDate lastDate:(GLCalendarDate *)lastDate calendar:(NSCalendar *)calendar rowHeight:(CGFloat)rowHeight;
 @end

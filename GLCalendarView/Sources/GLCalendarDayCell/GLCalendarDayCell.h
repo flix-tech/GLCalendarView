@@ -34,6 +34,7 @@ typedef NS_ENUM(NSInteger, ENLARGE_POINT) {
 @property (nonatomic, strong) NSDictionary *todayMonthAttributes;
 
 @property (nonatomic, strong) NSDictionary *dayDisabledLabelAttributes;
+@property (nonatomic, strong) NSDictionary *dayDisabledMonthAttributes;
 @property (nonatomic, strong) UIColor *todayBackgroundColor;
 
 @property (nonatomic) CGFloat editCoverPadding;

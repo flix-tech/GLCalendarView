@@ -154,6 +154,7 @@
 
     if (self.disabled) {
         attributes = self.dayDisabledLabelAttributes;
+        topAttributes = self.dayDisabledMonthAttributes;
     } else if(self.range) {
         attributes = self.range.selectedDayTitleAttributes;
         topAttributes = self.range.selectedMonthTitleAttributes;

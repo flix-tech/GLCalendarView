@@ -11,6 +11,8 @@
 
 @implementation GLCalendarDate
 
+@synthesize accessibilityLabel = _accessibilityLabel;
+
 - (instancetype)initWithCutDate:(NSDate *)date
 {
     self = [super init];
@@ -42,8 +44,6 @@
     } else {
         _monthDays = [[GLDateUtils calendar] rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:date].length;
     }
-
-    _accessibilityLabel = [[GLCalendarDate accessibilityDateFormatter] stringFromDate:self.date];
     
     return self;
 }
@@ -87,6 +87,14 @@
     });
 
     return df;
+}
+
+- (NSString*) accessibilityLabel
+{
+    if (!_accessibilityLabel) {
+        _accessibilityLabel = [[GLCalendarDate accessibilityDateFormatter] stringFromDate:self.date];
+    }
+    return _accessibilityLabel;
 }
 
 #pragma mark - copy
