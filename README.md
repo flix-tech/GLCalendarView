@@ -12,7 +12,7 @@
 This repo is in progress now, have to add it to cocoapods at some point.
 if you want to try my version, you have to add the line below:
 ```
-pod "GLCalendarView-Custom", :git => "https://github.com/gelosi/GLCalendarView.git", :tag => 'v1.3.17.square'
+pod "GLCalendarView-Custom", :git => "https://github.com/gelosi/GLCalendarView.git", :tag => 'v1.3.18.square'
 ```
 
 ## Source File
