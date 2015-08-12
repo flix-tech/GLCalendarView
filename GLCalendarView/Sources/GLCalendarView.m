@@ -409,7 +409,9 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     if (self.cellSide) {
         return self.cellSide;
     }
-    return (CGRectGetWidth(self.bounds) - self.padding * 2) / 7;
+    CGFloat cellSize = [UIScreen mainScreen].bounds.size.width / 7;
+    cellSize = (ceilf(cellSize) + floorf(cellSize)) / 2; //(round to 0.5 precision)
+    return cellSize;
 }
 
 # pragma mark - UIScrollView delegate
