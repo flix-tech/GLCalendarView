@@ -31,15 +31,12 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 @property (weak, nonatomic) IBOutlet UIView *weekDayTitle;
 @property (weak, nonatomic) IBOutlet GLCalendarMonthCoverView *monthCoverView;
 @property (strong, nonatomic) NSMutableDictionary *cellDates;
-@property (strong, nonatomic) GLCalendarDate *today;
 @property (nonatomic, strong, readonly) GLCalendarDate *firstGLDate;
 @property (nonatomic, strong, readonly) GLCalendarDate *lastGLDate;
+@property (nonatomic, strong, readonly) GLCalendarDate *todayGL;
 @end
 
 @implementation GLCalendarView
-
-//@synthesize firstDate = _firstDate;
-//@synthesize lastDate = _lastDate;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -70,9 +67,9 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
 - (void)setup
 {
-    self.collectionView.decelerationRate = UIScrollViewDecelerationRateNormal;
+    self.collectionView.decelerationRate = UIScrollViewDecelerationRateFast;
 
-    self.today = [[GLCalendarDate alloc] initWithDate:[NSDate date]];
+    self.today = [NSDate date];
 
     self.ranges = [NSMutableArray array];
     
@@ -103,7 +100,8 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    [self setupWeekDayTitle];}
+    [self setupWeekDayTitle];
+}
 
 - (void)setupWeekDayTitle
 {
@@ -257,7 +255,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 - (NSDate *)firstDate
 {
     if (!_firstGLDate) {
-        self.firstDate = [GLDateUtils dateByAddingDays:-365 toDate:self.today.date];
+        self.firstDate = [GLDateUtils dateByAddingDays:-365 toDate:self.today];
     }
     return _firstGLDate.date;
 }
@@ -271,9 +269,15 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 - (NSDate *)lastDate
 {
     if (!_lastGLDate) {
-        self.lastDate = [GLDateUtils dateByAddingDays:30 toDate:self.today.date];
+        self.lastDate = [GLDateUtils dateByAddingDays:30 toDate:self.today];
     }
     return _lastGLDate.date;
+}
+
+- (void)setToday:(NSDate *)today
+{
+    _today = today;
+    _todayGL = [[GLCalendarDate alloc] initWithDate: today];
 }
 
 # pragma mark - UICollectionView data source
@@ -322,7 +326,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
         disabled = ![self.calendarDisplayRange containsDate: date.date];
     }
 
-    [cell setDate:date range:[self selectedRangeForDate:date.date] cellPosition:cellPosition enlargePoint:enlargePoint disabled: disabled isToday: [self.today isTheSameDayAs: date]];
+    [cell setDate:date range:[self selectedRangeForDate:date.date] cellPosition:cellPosition enlargePoint:enlargePoint disabled: disabled isToday: [self.todayGL isTheSameDayAs: date]];
     
     return cell;
 }
@@ -432,7 +436,9 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
             self.monthCoverView.alpha = 0.1;
         } completion:^(BOOL finished) {
-            self.monthCoverView.hidden = YES;
+            if (finished) {
+                self.monthCoverView.hidden = YES;
+            }
         }];
     }
 }
@@ -442,7 +448,9 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
         self.monthCoverView.alpha = 0.1;
     } completion:^(BOOL finished) {
-        self.monthCoverView.hidden = YES;
+        if (finished) {
+            self.monthCoverView.hidden = YES;
+        }
     }];
 }
 
@@ -584,7 +592,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
 - (IBAction)backToTodayButtonPressed:(id)sender
 {
-    [self scrollToDate:self.today.date animated:YES];
+    [self scrollToDate:self.today animated:YES];
 }
 
 # pragma mark - cell styling

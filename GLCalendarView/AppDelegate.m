@@ -38,7 +38,7 @@
                                                          NSForegroundColorAttributeName:[UIColor grayColor]};
     [GLCalendarView appearance].monthCoverYearAttributes = @{NSFontAttributeName:[UIFont systemFontOfSize:24],
                                                          NSForegroundColorAttributeName:[UIColor grayColor]};
-    [GLCalendarView appearance].monthCoverBackgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.7];
+    [GLCalendarView appearance].monthCoverBackgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.8];
 
     [GLCalendarView appearance].monthCoverYearFormat = @"''yy";
 
