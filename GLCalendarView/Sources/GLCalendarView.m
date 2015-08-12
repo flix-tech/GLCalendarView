@@ -418,7 +418,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     self.monthCoverView.hidden = NO;
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+    [UIView animateWithDuration:0.1 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
         self.monthCoverView.alpha = 1;
     } completion:^(BOOL finished) {
         
@@ -433,7 +433,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     if (!decelerate) {
-        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+        [UIView animateWithDuration:0.166 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
             self.monthCoverView.alpha = 0.1;
         } completion:^(BOOL finished) {
             if (finished) {
@@ -445,7 +445,7 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
+    [UIView animateWithDuration:0.33 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^{
         self.monthCoverView.alpha = 0.1;
     } completion:^(BOOL finished) {
         if (finished) {
