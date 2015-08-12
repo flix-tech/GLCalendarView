@@ -39,15 +39,6 @@
     GLCalendarDateRange* displayRange = [GLCalendarDateRange rangeWithBeginDate:[GLDateUtils dateByAddingDays:4 toDate:[NSDate date]] endDate:[GLDateUtils dateByAddingDays: 183 toDate: [NSDate date]]];
 
     self.calendarView.calendarDisplayRange = displayRange;
-
-//    [self.calendarView reload];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:YES];
-
-    [self.calendarView scrollToDate:self.calendarView.lastDate animated:NO];
 }
 
 - (BOOL)calenderView:(GLCalendarView *)calendarView canAddRangeWithBeginDate:(NSDate *)beginDate
