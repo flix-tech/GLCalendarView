@@ -85,6 +85,8 @@ CGFloat closestWidthToFitWidthForRowHeight(CGFloat width, CGFloat rowHeight)
     self.cellSide = rowHeight;
     self.calendar = calendar;
 
+    self.frame = CGRectZero; // force re-layout
+
     [self setNeedsLayout];
 }
 
