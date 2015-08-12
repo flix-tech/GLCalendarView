@@ -67,8 +67,6 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 
 - (void)setup
 {
-    self.collectionView.decelerationRate = UIScrollViewDecelerationRateFast;
-
     self.today = [NSDate date];
 
     self.ranges = [NSMutableArray array];
