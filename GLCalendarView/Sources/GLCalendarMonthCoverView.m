@@ -25,6 +25,11 @@ CGFloat closestWidthToFitWidthForRowHeight(CGFloat width, CGFloat rowHeight)
     return res;
 }
 
+BOOL isInteger(CGFloat val)
+{
+    return val == floorf(val);
+}
+
 @interface GLCalendarMonthCoverView()
 @property (nonatomic, strong) GLCalendarDate *firstDate;
 @property (nonatomic, strong) GLCalendarDate *lastDate;
@@ -107,8 +112,6 @@ CGFloat closestWidthToFitWidthForRowHeight(CGFloat width, CGFloat rowHeight)
 
     NSDateComponents *today = [calendar components:NSCalendarUnitYear fromDate:[NSDate date]];
 
-    NSInteger previousDayDiff = 0;
-    
     for (NSDate *date = [GLDateUtils monthFirstDate:firstDate]; [date compare:lastDate] < 0; date = [GLDateUtils dateByAddingMonths:1 toDate:date]) {
         NSInteger dayDiff = [GLDateUtils daysBetween:firstDate and:date];
         if (dayDiff < 0) {
@@ -116,16 +119,18 @@ CGFloat closestWidthToFitWidthForRowHeight(CGFloat width, CGFloat rowHeight)
         }
 
         NSDateComponents *dayOfWeek = [calendar components:NSCalendarUnitWeekday fromDate:date];
-        // this strange formula will produce a half of number of lines required to show a month
-        CGFloat labelRowsOffset = 1 + ((10*(dayDiff - previousDayDiff - dayOfWeek.weekday - 1)) / 70) / 2.f;
 
-        previousDayDiff = dayDiff;
-        
+        // this strange formula will produce a half of number of lines required to show a month
+        NSInteger days = [[GLCalendarDate alloc] initWithCutDate: date].monthDays;
+        CGFloat labelRowsOffset = 1 + ((10*(days - dayOfWeek.weekday - 1)) / 70) / 2.f;
+
         NSDateComponents *components = [calendar components:NSCalendarUnitDay|NSCalendarUnitMonth|NSCalendarUnitYear fromDate:date];
 
         UILabel *monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.bounds), rowHeight * 3)];
         monthLabel.backgroundColor = [UIColor clearColor];
         monthLabel.textAlignment = NSTextAlignmentCenter;
+        monthLabel.numberOfLines = 1; //required for baseline settings
+        monthLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
 
         NSString *labelText = [self.monthFormatter stringFromDate:date];
 
@@ -149,13 +154,11 @@ CGFloat closestWidthToFitWidthForRowHeight(CGFloat width, CGFloat rowHeight)
 
         CGRect currentLabelRect = monthLabel.frame;
         currentLabelRect.size.width = closestWidthToFitWidthForRowHeight(CGRectGetWidth(monthLabel.frame), rowHeight);
-        if (labelRowsOffset - floorf(labelRowsOffset) > 0) {
-            // for labels covering date numbers we want certain height
-            currentLabelRect.size.height = rowHeight;
-        }
-        monthLabel.frame = currentLabelRect;
+        // for fractional row offsets (e.g. 2.5) rows, we use one row height, otherwise - two rows height
+        currentLabelRect.size.height = (isInteger(labelRowsOffset)) ? rowHeight * 2 : rowHeight;
+
+        monthLabel.frame = CGRectIntegral(currentLabelRect) ;
         monthLabel.center = CGPointMake(CGRectGetMidX(self.bounds), ceilf(  rowHeight * (dayDiff / 7 + labelRowsOffset)));
-//        monthLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         monthLabel.backgroundColor = self.backgroundColor;
 
         [self addSubview:monthLabel];
