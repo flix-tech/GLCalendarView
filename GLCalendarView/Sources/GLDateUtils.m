@@ -56,9 +56,18 @@
     if (weekday == calendar.firstWeekday) {
         return date;
     } else {
-        return [GLDateUtils dateByAddingDays:(calendar.firstWeekday - weekday) toDate:date];
+
+        NSInteger days = calendar.firstWeekday - weekday;
+        if (calendar.firstWeekday > weekday) {
+            days -= 7;
+            // that could happen when we have Mon as a first week day
+            // because of day's index are: [Sun,Mon,Tue,...,Sat]
+        }
+
+        return [GLDateUtils dateByAddingDays:days toDate:date];
     }
 }
+
 
 + (NSDate *)weekLastDate:(NSDate *)date
 {
