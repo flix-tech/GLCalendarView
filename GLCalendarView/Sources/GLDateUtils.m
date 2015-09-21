@@ -38,14 +38,6 @@
         }
     });
     return calendar;
-//    NSMutableDictionary *threadDictionary = [[NSThread currentThread] threadDictionary];
-//    NSCalendar *cal = [threadDictionary objectForKey:@"GLCalendar"];
-//    if (!cal) {
-//        cal = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-//        cal.locale = [NSLocale currentLocale];
-//        [threadDictionary setObject:cal forKey:@"GLCalendar"];
-//    }
-//    return cal;
 }
 
 + (NSDate *)weekFirstDate:(NSDate *)date
@@ -58,7 +50,7 @@
     } else {
 
         NSInteger days = calendar.firstWeekday - weekday;
-        if (calendar.firstWeekday > weekday) {
+        if (days > 0) {
             days -= 7;
             // that could happen when we have Mon as a first week day
             // because of day's index are: [Sun,Mon,Tue,...,Sat]
@@ -73,8 +65,8 @@
 {
     NSCalendar *calendar = [GLDateUtils calendar];
     NSDateComponents *components = [calendar components:NSCalendarUnitWeekday fromDate:date];
-    NSInteger weekday = components.weekday;//1 for Sunday
-    if (weekday == (calendar.firstWeekday + 5 % 7) + 1) {  // firstWeekday + 6 (= 7 Saturday for US)
+    NSInteger weekday = components.weekday;//1 for Sunday, 2 for Monday
+    if (weekday == (calendar.firstWeekday + 5) % 7 + 1) {  // firstWeekday + 6 = 7 (Saturday for US)
         return date;
     } else {
         return [GLDateUtils dateByAddingDays:(7 - weekday) toDate:date];
@@ -89,9 +81,6 @@
     [result setDay:1];
     [result setMonth:[components month]];
     [result setYear:[components year]];
-    [result setHour:12];
-    [result setMinute:0];
-    [result setSecond:0];
     
     return [calendar dateFromComponents:result];
 }
