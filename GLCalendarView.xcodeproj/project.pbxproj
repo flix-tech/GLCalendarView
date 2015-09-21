@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7C9684781BB0012F00B25314 /* GLDateUtilsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C9684771BB0012F00B25314 /* GLDateUtilsTests.m */; settings = {ASSET_TAGS = (); }; };
 		7C9F5D611B711E49002AA3D0 /* GLCalendarDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C9F5D601B711E49002AA3D0 /* GLCalendarDate.m */; };
 		7C9F5D621B711E49002AA3D0 /* GLCalendarDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C9F5D601B711E49002AA3D0 /* GLCalendarDate.m */; };
 		FA2D5F481AF0C101003D4CE7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2D5F471AF0C101003D4CE7 /* main.m */; };
@@ -34,6 +35,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7C9684771BB0012F00B25314 /* GLDateUtilsTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLDateUtilsTests.m; sourceTree = "<group>"; };
 		7C9F5D5F1B711E49002AA3D0 /* GLCalendarDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLCalendarDate.h; sourceTree = "<group>"; };
 		7C9F5D601B711E49002AA3D0 /* GLCalendarDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLCalendarDate.m; sourceTree = "<group>"; };
 		FA2D5F421AF0C101003D4CE7 /* GLCalendarView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GLCalendarView.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -123,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				FA2D5F611AF0C101003D4CE7 /* GLCalendarViewTests.m */,
+				7C9684771BB0012F00B25314 /* GLDateUtilsTests.m */,
 				FA2D5F5F1AF0C101003D4CE7 /* Supporting Files */,
 			);
 			path = GLCalendarViewTests;
@@ -293,6 +296,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C9F5D621B711E49002AA3D0 /* GLCalendarDate.m in Sources */,
+				7C9684781BB0012F00B25314 /* GLDateUtilsTests.m in Sources */,
 				FA2D5F621AF0C101003D4CE7 /* GLCalendarViewTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
