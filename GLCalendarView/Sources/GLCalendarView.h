@@ -63,7 +63,7 @@ enum RANGE_DISPLAY_MODE;
 
 @property (weak, nonatomic, readonly) UIView *weekDayTitle;
 
-@property (nonatomic, readonly) NSCalendar *calendar;
+@property (nonatomic, strong) NSCalendar *calendar;
 @property (nonatomic, copy) NSDate *firstDate;
 @property (nonatomic, copy) NSDate *lastDate;
 @property (nonatomic, strong) NSMutableArray *ranges;

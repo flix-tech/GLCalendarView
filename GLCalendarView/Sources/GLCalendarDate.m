@@ -13,6 +13,11 @@
 
 @synthesize accessibilityLabel = _accessibilityLabel;
 
+- (instancetype)init
+{
+    return [self initWithDate:[NSDate date]];
+}
+
 - (instancetype)initWithCutDate:(NSDate *)date
 {
     self = [super init];

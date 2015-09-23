@@ -18,7 +18,6 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
 #define DEFAULT_ROW_HEIGHT 46;
 
 @interface GLCalendarView()<UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate>
-@property (nonatomic, readwrite) NSCalendar *calendar;
 @property (nonatomic, weak) GLCalendarDateRange *rangeUnderEdit;
 
 @property (nonatomic, strong) UILongPressGestureRecognizer *dragBeginDateGesture;
@@ -141,6 +140,21 @@ static NSString * const CELL_REUSE_IDENTIFIER = @"DayCell";
     self.monthCoverView.monthFormat = appearance.monthCoverMonthFormat;
     self.monthCoverView.yearFormat = appearance.monthCoverYearFormat;
     
+}
+
+#pragma mark - setting calendar
+
+- (void)setCalendar:(nonnull NSCalendar *)calendar
+{
+    if (!calendar) {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"GLCalendarView calendar property can not be nil" userInfo:nil];
+    }
+
+    if (![calendar.calendarIdentifier isEqualToString:NSCalendarIdentifierGregorian]) {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"GLCalendarView supports only NSCalendarIdentifierGregorian" userInfo:nil];
+    }
+
+    _calendar = calendar;
 }
 
 #pragma mark - public api
