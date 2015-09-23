@@ -15,7 +15,8 @@ static NSCalendar* GLCalendar;
 
 @implementation GLDateUtils
 
-+ (BOOL)date:(NSDate *)date1 isSameDayAsDate:(NSDate *)date2 {
++ (BOOL)date:(NSDate *)date1 isSameDayAsDate:(NSDate *)date2
+{
     if (date1 == nil || date2 == nil) {
         return NO;
     }
@@ -29,21 +30,21 @@ static NSCalendar* GLCalendar;
             [day2 year] == [day1 year]);
 }
 
-+ (NSCalendar *)calendar {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
++ (NSCalendar *)calendar
+{
+    if(!GLCalendar){
         GLCalendar = [NSCalendar currentCalendar];
         if (![GLCalendar.calendarIdentifier isEqualToString: NSCalendarIdentifierGregorian]) {
             GLCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
             GLCalendar.locale = [NSLocale currentLocale];
         }
-    });
+    };
     return GLCalendar;
 }
 
 + (void)setCalendar:(NSCalendar *)calendar
 {
-    if ([GLCalendar.calendarIdentifier isEqualToString:NSCalendarIdentifierGregorian]) {
+    if ([calendar.calendarIdentifier isEqualToString:NSCalendarIdentifierGregorian]) {
         GLCalendar = calendar;
     } else {
         @throw [NSException exceptionWithName:NSInvalidArgumentException
@@ -76,14 +77,6 @@ static NSCalendar* GLCalendar;
 + (NSDate *)weekLastDate:(NSDate *)date
 {
     return [GLDateUtils dateByAddingDays:6 toDate:[self weekFirstDate:date]];
-//    NSCalendar *calendar = [GLDateUtils calendar];
-//    NSDateComponents *components = [calendar components:NSCalendarUnitWeekday fromDate:date];
-//    NSInteger weekday = components.weekday;//1 for Sunday, 2 for Monday
-//    if (weekday == (calendar.firstWeekday + 5) % 7 + 1) {  // firstWeekday + 6 = 7 (Saturday for US)
-//        return date;
-//    } else {
-//        return [GLDateUtils dateByAddingDays:(7 - weekday) toDate:date];
-//    }
 }
 
 + (NSDate *)monthFirstDate:(NSDate *)date
