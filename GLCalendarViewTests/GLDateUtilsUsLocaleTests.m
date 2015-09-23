@@ -9,11 +9,26 @@
 #import <XCTest/XCTest.h>
 #import "GLDateUtils.h"
 
-@interface GLDateUtilsTests : XCTestCase
-
+@interface GLDateUtilsUsLocaleTests : XCTestCase
+@property (readonly) NSCalendar *testCalendar;
 @end
 
-@implementation GLDateUtilsTests
+@implementation GLDateUtilsUsLocaleTests
+@synthesize testCalendar = _testCalendar;
+
+- (NSCalendar *)testCalendar
+{
+    if (!_testCalendar) {
+        _testCalendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+        _testCalendar.locale = [NSLocale localeWithLocaleIdentifier:@"en_US"];
+    }
+    return _testCalendar;
+}
+
+- (void)setUp
+{
+    [GLDateUtils setCalendar:self.testCalendar];
+}
 
 - (NSDate *)dateWithDay:(NSUInteger)day month:(NSUInteger)month year:(NSUInteger)year
 {

@@ -10,6 +10,8 @@
 
 #define CALENDAR_COMPONENTS NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay
 
+static NSCalendar* GLCalendar;
+
 
 @implementation GLDateUtils
 
@@ -29,15 +31,25 @@
 
 + (NSCalendar *)calendar {
     static dispatch_once_t onceToken;
-    static NSCalendar* calendar;
     dispatch_once(&onceToken, ^{
-        calendar = [NSCalendar currentCalendar];
-        if (![calendar.calendarIdentifier isEqualToString: NSCalendarIdentifierGregorian]) {
-            calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-            calendar.locale = [NSLocale currentLocale];
+        GLCalendar = [NSCalendar currentCalendar];
+        if (![GLCalendar.calendarIdentifier isEqualToString: NSCalendarIdentifierGregorian]) {
+            GLCalendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+            GLCalendar.locale = [NSLocale currentLocale];
         }
     });
-    return calendar;
+    return GLCalendar;
+}
+
++ (void)setCalendar:(NSCalendar *)calendar
+{
+    if ([GLCalendar.calendarIdentifier isEqualToString:NSCalendarIdentifierGregorian]) {
+        GLCalendar = calendar;
+    } else {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException
+                                       reason:@"GLDateUtils are compatible with NSCalendarIdentifierGregorian only"
+                                     userInfo:nil];
+    }
 }
 
 + (NSDate *)weekFirstDate:(NSDate *)date
@@ -63,14 +75,15 @@
 
 + (NSDate *)weekLastDate:(NSDate *)date
 {
-    NSCalendar *calendar = [GLDateUtils calendar];
-    NSDateComponents *components = [calendar components:NSCalendarUnitWeekday fromDate:date];
-    NSInteger weekday = components.weekday;//1 for Sunday, 2 for Monday
-    if (weekday == (calendar.firstWeekday + 5) % 7 + 1) {  // firstWeekday + 6 = 7 (Saturday for US)
-        return date;
-    } else {
-        return [GLDateUtils dateByAddingDays:(7 - weekday) toDate:date];
-    }
+    return [GLDateUtils dateByAddingDays:6 toDate:[self weekFirstDate:date]];
+//    NSCalendar *calendar = [GLDateUtils calendar];
+//    NSDateComponents *components = [calendar components:NSCalendarUnitWeekday fromDate:date];
+//    NSInteger weekday = components.weekday;//1 for Sunday, 2 for Monday
+//    if (weekday == (calendar.firstWeekday + 5) % 7 + 1) {  // firstWeekday + 6 = 7 (Saturday for US)
+//        return date;
+//    } else {
+//        return [GLDateUtils dateByAddingDays:(7 - weekday) toDate:date];
+//    }
 }
 
 + (NSDate *)monthFirstDate:(NSDate *)date
