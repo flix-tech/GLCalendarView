@@ -45,7 +45,7 @@ BOOL isInteger(CGFloat val)
 - (NSDateFormatter*) monthFormatter
 {
     if (!_monthFormatter) {
-        _monthFormatter = [self dateFormatterWithFormat: self.monthFormat?:@"MMMM"];
+        _monthFormatter = [self dateFormatterWithFormat: self.monthFormat?:@"LLLL"];
     }
     return _monthFormatter;
 }
